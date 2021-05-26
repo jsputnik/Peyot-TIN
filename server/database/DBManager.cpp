@@ -9,7 +9,8 @@ DBManager::DBManager(string db_name) : db_name(db_name) {
 }
 
 void DBManager::open() {
-    //lock mutex
+    pthread_mutex_lock(&clients_mutex); //should use pthread_mutex_timedlock
+
     db.open(db_name, std::ios::in | std::ios::out | std::ios_base::app); //TODO (?): mode parameter: ios::in for input only, ios::out for output only
     if (!db.good()) {
         cerr << "Can't open file: " << db_name << endl;
@@ -19,7 +20,7 @@ void DBManager::open() {
     std::getline(db, line);
     if (line != "<CLIENTS DATABASE>")
         cerr << "File is not clients database" << endl;
-
+    
     std::getline(db, line);
     if (line != "<login-hashed_passwd-salt>")
         cerr << "File is not clients database" << endl;
@@ -27,16 +28,10 @@ void DBManager::open() {
 
 void DBManager::close() {
     db.close();
-    //unlock mutex
+    pthread_mutex_unlock(&clients_mutex);
 }
 
 bool DBManager::find_user(std::string user_login) {
-//    if user.login==login and user.passwd==paswd return true ?
-//    for (User user : users) {
-//        if (user.getLogin() == login)
-//            return true;
-//    }
-//    return false;
     open();
     std::string login;
     std::string hashed_password;

@@ -3,6 +3,7 @@
 #include "Receiver.h"
 #include <iostream>
 #include <sys/socket.h>
+#include <cstring>
 
 using namespace std;
 
@@ -25,5 +26,6 @@ string Receiver::receive() {
     cout << "Bytes received: " << bytes_rcvd << endl;
     cout << "Message received: " << buf << endl;
     string msg = buf;
+    memset(buf, 0, sizeof buf); //clear buffer
     return msg;
 }

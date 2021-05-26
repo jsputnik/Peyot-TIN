@@ -19,10 +19,10 @@ Sender::Sender(int sock, const char* msg) {
 
 void Sender::send_msg() {
     unsigned int bytes_sent;
-    cout << "Sizeof msg: " << strlen(msg) << endl;
+    cout << "Sizeof msg to be sent: " << strlen(msg) << endl;
     if ((bytes_sent = send(sock, msg, strlen(msg), 0)) == -1) {
         cerr << "Send error, bytes sent: " << bytes_sent << endl;
         exit(3);
     }
-    cout << "Bytes sent: " << bytes_sent << endl;
+    cout << "Message sent. Bytes sent: " << bytes_sent << endl;
 }

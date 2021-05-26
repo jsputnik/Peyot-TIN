@@ -3,7 +3,6 @@
 #ifndef PEYOT_SENDER_H
 #define PEYOT_SENDER_H
 
-
 class Sender {
     int sock;
     const char* msg;

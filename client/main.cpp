@@ -12,8 +12,12 @@ int main() {
     Client client(server_address, server_port);
     client.print_server_details(); //server IP address and port client is connecting to
     client.connect_to_server();
-    client.send("Challenge 123");
-    cout << client.receive() << endl;
+    string msg = "";
+    while (msg != "quit") {
+        getline(cin, msg);
+        client.send(msg.c_str());
+        cout << client.receive() << endl;
+    }
     client.stop();
     return 0;
 }

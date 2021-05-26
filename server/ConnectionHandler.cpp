@@ -12,14 +12,15 @@ void* ConnectionHandler::handle_connection(void* args) {
     cout << "Handle connection..." << endl;
     int sock = *(int*)args;
     Receiver receiver(sock);
-    receiver.receive();
-    //execute request
-    //database manager
-    //logger
-    const char* msg = "Answer 123";
-    Sender sender(sock, msg);
-    sender.send_msg();
-    cout << "Connection finished" << endl;
+    while(receiver.receive() != "quit") {
+        //execute request
+        //database manager
+        //logger
+        const char* msg = "Answer 123";
+        Sender sender(sock, msg); //TODO (?): move above while loop later
+        sender.send_msg();
+    }
+    cout << "Connection finished with client with socked id: " << sock << endl;
     close(sock);
 }
 

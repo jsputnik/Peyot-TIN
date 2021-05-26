@@ -17,6 +17,7 @@ public:
     void start();
     void stop();
     void print_server_details();
+    void log_server_details();
 };
 
 

@@ -14,11 +14,13 @@ int main() {
     client.connect_to_server();
     string msg = "";
     while (msg != "quit") {
-        getline(cin, msg);
-        client.send(msg.c_str());
-        cout << client.receive() << endl;
+       getline(cin, msg);
+       client.send(msg.c_str());
+       cout << client.receive() << endl;
     }
     client.stop();
+
+
     return 0;
 }
 

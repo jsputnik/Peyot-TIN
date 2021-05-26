@@ -6,19 +6,21 @@
 using namespace std;
 
 int main() {
-    std::cout << "Start client" << std::endl;
-    const char* server_address = "127.0.0.1";
-    const char* server_port = "45265";
-    Client client(server_address, server_port);
-    client.print_server_details(); //server IP address and port client is connecting to
-    client.connect_to_server();
-    string msg = "";
-    while (msg != "quit") {
-        getline(cin, msg);
-        client.send(msg.c_str());
-        cout << client.receive() << endl;
-    }
-    client.stop();
+//    std::cout << "Start client" << std::endl;
+//    const char* server_address = "127.0.0.1";
+//    const char* server_port = "45265";
+//    Client client(server_address, server_port);
+//    client.print_server_details(); //server IP address and port client is connecting to
+//    client.connect_to_server();
+//    string msg = "";
+//    while (msg != "quit") {
+//        getline(cin, msg);
+//        client.send(msg.c_str());
+//        cout << client.receive() << endl;
+//    }
+//    client.stop();
+
+
     return 0;
 }
 

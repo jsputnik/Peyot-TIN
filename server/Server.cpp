@@ -1,6 +1,7 @@
 //21.05.2021
 
 #include "Server.h"
+#include "eventLog/ELManager.h"
 #include <iostream>
 #include <arpa/inet.h>
 #include <unistd.h>
@@ -39,4 +40,12 @@ void Server::stop() {
 void Server::print_server_details() {
     cout << "Server IP: " << inet_ntoa((struct in_addr) server.sin_addr) << endl;
     cout << "Server port: " << ntohs(server.sin_port) << endl;
+}
+
+void Server::log_server_details() {
+    string data;
+    data = "Server IP: " + (string)inet_ntoa((struct in_addr) server.sin_addr) + "\n";
+    ELManager elManager("../server/eventLog/logs");
+    elManager.save(data);
+    elManager.close();
 }

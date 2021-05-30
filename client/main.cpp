@@ -19,10 +19,12 @@ int main() {
     string request;
     getline(cin, request);
     ui.setRequest(request);
-    while (ui.handleRegister()) {
+    while (ui.handleLogin() || ui.handleRegister()) {
         ++attempt;
+        cout << "Attempt: " << attempt << endl;
         if (attempt > maxAttempts) {
             client.stop(); //disconnect
+            return 1;
         }
     }
     client.stop();
@@ -40,9 +42,6 @@ int main() {
 //       client.send(msg.c_str());
 //       cout << client.receive() << endl;
 //    }
-    client.stop();
-
-
     return 0;
 }
 

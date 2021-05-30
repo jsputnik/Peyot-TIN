@@ -13,58 +13,63 @@ Executor::Executor(string request) {
 
 //return response ?
 void Executor::execute() {
+    cout << request << endl;
     if (request == "quit") {
-        setResponse("150 Logged out");
+        setResponse("400 Logged out");
         return;
     }
-    setResponse("UNASSIGNED RESPONSE");
+    if (request == "register") {
+        registerUser();
+        return;
+    }
+    if (request == "login") {
+        loginUser();
+        return;
+    }
     //if msg_rcvd == login -> loginUser
     //if msg_rcvd == register -> registerUser
     //...
-    registerUser();
+    setResponse("UNASSIGNED RESPONSE");
 }
 
 void Executor::loginUser() {
     //for now hardcoded
-    string login = "marek";
+    string login = "mkwerca";
     string password = "passwd";
     DBManager dbManager("../server/database/clients");
     //TODO: findSalt(login), findHashedPasswd(login)
-    //salt = find salt
-    //hashed passwd = find hashed_passwd
+    string salt_string = "a3EtfdZ5Nc39m5IWxXQY/A==";
+    string hash_string = "uUUY7bsF43SPoMTNlE1iR5VjKF+NRRtctVXkv2X6oy+3SePviwJUJxa/FFhLciaviGt7JMDsjYgH6GcQpQzyAQ==";
+    unsigned char* salt = reinterpret_cast<unsigned char*>(const_cast<char*>(salt_string.c_str()));
+    unsigned char hash_result[SHA512_DIGEST_LENGTH];
+    unsigned char encoded_hash_result[4*(SHA512_DIGEST_LENGTH+2)/3];
+    security_manager.hash_password(SecurityManager::merge_salt_with_password(salt, security_manager.getEncodedSaltLength(), password), hash_result, encoded_hash_result, SHA512_DIGEST_LENGTH);
+    string encoded_hash_result_string = reinterpret_cast<char*>(encoded_hash_result);
+    if (hash_string == encoded_hash_result_string) {
+        cout << "Login successful" << endl;
+        setResponse("101 Login successful");
+        return;
+    }
+    setResponse("210 Login unsuccessful");
 }
 
 void Executor::registerUser() {
     //for now hardcoded
     string login = "testuser";
     string password = "testpasswd";
-
-    int not_encoded_salt_length = 16;
-    int encoded_salt_length = 4*(not_encoded_salt_length+2)/3; //
-    unsigned char salt[not_encoded_salt_length];
-    unsigned char encoded_salt[encoded_salt_length];
-    security_manager.generate_salt(encoded_salt, salt, not_encoded_salt_length); //encoded_salt_length
-//    cout << "Encoded salt: " << endl;
-//    for (unsigned int i = 0; i < encoded_salt_length; ++i) {
-//        cout << encoded_salt[i];
-//    }
-//    cout << endl;
+    unsigned char salt[security_manager.getNotEncodedSaltLength()];
+    unsigned char encoded_salt[security_manager.getEncodedSaltLength()];
+    security_manager.generate_salt(encoded_salt, salt, security_manager.getNotEncodedSaltLength()); //encoded_salt_length
     unsigned char hash[SHA512_DIGEST_LENGTH];
-    unsigned char encoded_hash[4*(SHA512_DIGEST_LENGTH+2)/3]; //86
-//    unsigned char salt[not_encoded_salt_length];
-//    security_manager.decode(salt, encoded_salt, encoded_salt_length);
-//    cout << "Decoded salt: " << endl;
-//    for (unsigned int i = 0; i < not_encoded_salt_length; ++i) {
-//        cout << salt[i];
-//    }
-//    cout << endl;
-    security_manager.hash_password(SecurityManager::merge_salt_with_password(encoded_salt, encoded_salt_length, password), hash, encoded_hash, SHA512_DIGEST_LENGTH);
+    unsigned char encoded_hash[4*(SHA512_DIGEST_LENGTH+2)/3];
+    security_manager.hash_password(SecurityManager::merge_salt_with_password(encoded_salt, security_manager.getEncodedSaltLength(), password), hash, encoded_hash, SHA512_DIGEST_LENGTH);
 
     DBManager dbManager("../server/database/clients");
     //cast unsigned char to char
     string hash_string = reinterpret_cast<char*>(encoded_hash);
     string salt_string = reinterpret_cast<char*>(encoded_salt);
     dbManager.add_user(User(login, hash_string, salt_string));
+    setResponse("101 Registration successful");
 }
 
 void Executor::setResponse(const string &response) {

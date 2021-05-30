@@ -17,6 +17,7 @@ public:
     bool handleResign();
     bool handleModify();
     bool handleCheck();
+    void help();
 
     const std::string &getRequest() const;
     void setRequest(const std::string &request);

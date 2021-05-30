@@ -38,3 +38,11 @@ void SecurityManager::encode(unsigned char output[], unsigned char input[], int 
 void SecurityManager::decode(unsigned char output[], unsigned char input[], int input_length) {
     EVP_DecodeBlock(output, input, input_length);
 }
+
+int SecurityManager::getNotEncodedSaltLength() const {
+    return not_encoded_salt_length;
+}
+
+int SecurityManager::getEncodedSaltLength() const {
+    return encoded_salt_length;
+}

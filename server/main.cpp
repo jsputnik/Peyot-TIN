@@ -9,6 +9,8 @@ using namespace std;
 
 int main() {
     std::cout << "Start server" << std::endl;
+    Executor e("abc");
+    e.loginUser();
     Server server;
     server.print_server_details();
 //    server.log_server_details();

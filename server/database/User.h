@@ -1,6 +1,4 @@
-//
-// Created by kislu on 26.05.2021.
-//
+//26.05.2021
 
 #ifndef DATABASE_USER_H
 #define DATABASE_USER_H
@@ -29,6 +27,14 @@ public:
     const std::string &getSalt() const {
         return salt;
     }
+
+//    unsigned char *getHashedPassword() const {
+//        return hashed_password;
+//    }
+//
+//    unsigned char *getSalt() const {
+//        return salt;
+//    }
 };
 
 

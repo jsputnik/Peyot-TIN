@@ -32,6 +32,7 @@ void Client::send(const char* msg) {
     sender.set_msg(msg);
     sender.send_msg();
 }
+
 string Client::receive() {
     receiver.set_sock(sock);
     return receiver.receive();

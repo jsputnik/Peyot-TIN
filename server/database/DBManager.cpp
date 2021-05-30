@@ -1,6 +1,7 @@
 //26.05.2021
 
 #include "DBManager.h"
+#include "../security/SecurityManager.h"
 #include <iostream>
 
 using namespace std;

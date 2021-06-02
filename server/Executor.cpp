@@ -38,6 +38,14 @@ void Executor::loginUser() {
     string password = "passwd";
     DBManager dbManager("../server/database/clients");
     //TODO: findSalt(login), findHashedPasswd(login)
+    /*
+    std::unique_ptr<User> user = dbManager.find_user(login);
+    if (user == nullptr) {
+        return; //user not found
+    }
+    string salt_string = user->getSalt();
+    string hash_string = user->getHashedPassword();
+    */
     string salt_string = "a3EtfdZ5Nc39m5IWxXQY/A==";
     string hash_string = "uUUY7bsF43SPoMTNlE1iR5VjKF+NRRtctVXkv2X6oy+3SePviwJUJxa/FFhLciaviGt7JMDsjYgH6GcQpQzyAQ==";
     unsigned char* salt = reinterpret_cast<unsigned char*>(const_cast<char*>(salt_string.c_str()));

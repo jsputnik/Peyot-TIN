@@ -36,22 +36,25 @@ void DBManager::close() {
     pthread_mutex_unlock(&clients_mutex);
 }
 
-bool DBManager::find_user(std::string user_login) {
+std::unique_ptr<User> DBManager::find_user(std::string user_login) {
     open();
     std::string login;
     std::string hashed_password;
     std::string salt;
-    while (!db.eof()) {
+
+    bool found_user = false;
+    while (!db.eof() && !found_user) {
         db >> login;
         if (login == user_login) {
-            close();
-            return true;
+            found_user = true;
         }
         db >> hashed_password;
         db >> salt;
     }
     close();
-    return false;
+    if (found_user)
+        return std::make_unique<User>(login, hashed_password, salt);
+    return nullptr;
 }
 
 

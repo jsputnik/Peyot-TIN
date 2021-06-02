@@ -5,6 +5,7 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <memory>
 #include "User.h"
 
 //tests:
@@ -37,7 +38,7 @@ public:
     void add_user(User user);
     //void remove_user(std::string login);
     //void modify_user(User user); ?
-    bool find_user(std::string login);
+    std::unique_ptr<User> find_user(std::string login);
     void find_all();
     void test_print();
 };

@@ -1,6 +1,4 @@
-//
-// Created by szymon on 6/2/21.
-//
+//02.06.2021
 
 #ifndef PEYOT_DATE_H
 #define PEYOT_DATE_H
@@ -18,6 +16,7 @@ public:
     void set_start(std::string date);
     void set_end(std::string date);
     void print();
+    std::string to_string();
 };
 
 

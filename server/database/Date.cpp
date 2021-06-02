@@ -10,7 +10,7 @@ void Date::set_start(std::string date) {
     struct std::tm t_now = *std::localtime(&now);
 
     struct std::tm tm;
-    std::istringstream ss("14.05.2021 16:31");
+    std::istringstream ss(date);
     ss >> std::get_time(&tm, "%d.%m.%Y %H:%M");
     if (ss.fail()) {
         std::cerr << "Date::set_start error - wrong date format\n";
@@ -49,4 +49,15 @@ void Date::print() {
     tm = *std::localtime(&end_time);
     std::cout << "End: " << std::put_time(&tm, "%d.%m.%Y %H:%M")  << std::endl;
     //std::cout << std::put_time(&tm, "%c")  << std::endl;
+}
+
+std::string Date::to_string() {
+    std::stringstream temp;
+    struct std::tm tm;
+    tm = *std::localtime(&start_time);
+    temp << std::put_time(&tm, "%d.%m.%Y %H:%M");
+    temp << '\t';
+    tm = *std::localtime(&end_time);
+    temp << std::put_time(&tm, "%d.%m.%Y %H:%M");
+    return temp.str();
 }

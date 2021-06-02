@@ -19,12 +19,16 @@ void DBManager::open() {
     }
     std::string line;
     std::getline(db, line);
-    if (line != "<CLIENTS DATABASE>")
-        cerr << "File is not clients database" << endl;
-    
+    if (line != "<CLIENTS DATABASE>" && line != "<EMPLOYEES DATABASE>") {
+        cerr << db_name << " is not clients/employees database" << endl;
+        //exit()
+    }
+
     std::getline(db, line);
-    if (line != "<login-hashed_passwd-salt>")
-        cerr << "File is not clients database" << endl;
+    if (line != "<login-hashed_passwd-salt>") {
+        cerr << db_name <<" is not clients/employees database" << endl;
+        //exit()
+    }
 }
 
 void DBManager::close() {

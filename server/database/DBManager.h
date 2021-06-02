@@ -28,7 +28,7 @@ class DBManager {
 
     // lock mutex before file open
     // unlock mutex after file close
-    pthread_mutex_t clients_mutex  = PTHREAD_MUTEX_INITIALIZER; //should be static if multiple DBManagers are created
+    static inline pthread_mutex_t clients_mutex  = PTHREAD_MUTEX_INITIALIZER; //should be static if multiple DBManagers are created
 
     void open();
     void close();

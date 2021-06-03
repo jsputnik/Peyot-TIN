@@ -13,6 +13,7 @@ class Date {
     std::time_t end_time;
 public:
     Date();
+    Date(std::string start_date, std::string end_date);
     void set_start(std::string date);
     void set_end(std::string date);
     void print();

@@ -5,6 +5,7 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <memory>
 #include "User.h"
 
 //tests:
@@ -28,7 +29,7 @@ class DBManager {
 
     // lock mutex before file open
     // unlock mutex after file close
-    pthread_mutex_t clients_mutex  = PTHREAD_MUTEX_INITIALIZER; //should be static if multiple DBManagers are created
+    static inline pthread_mutex_t clients_mutex  = PTHREAD_MUTEX_INITIALIZER; //should be static if multiple DBManagers are created
 
     void open();
     void close();
@@ -37,7 +38,7 @@ public:
     void add_user(User user);
     //void remove_user(std::string login);
     //void modify_user(User user); ?
-    bool find_user(std::string login);
+    std::unique_ptr<User> find_user(std::string login);
     void find_all();
     void test_print();
 };

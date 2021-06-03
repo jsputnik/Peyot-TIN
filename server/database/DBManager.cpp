@@ -19,12 +19,16 @@ void DBManager::open() {
     }
     std::string line;
     std::getline(db, line);
-    if (line != "<CLIENTS DATABASE>")
-        cerr << "File is not clients database" << endl;
-    
+    if (line != "<CLIENTS DATABASE>" && line != "<EMPLOYEES DATABASE>") {
+        cerr << db_name << " is not clients/employees database" << endl;
+        //exit()
+    }
+
     std::getline(db, line);
-    if (line != "<login-hashed_passwd-salt>")
-        cerr << "File is not clients database" << endl;
+    if (line != "<login-hashed_passwd-salt>") {
+        cerr << db_name <<" is not clients/employees database" << endl;
+        //exit()
+    }
 }
 
 void DBManager::close() {
@@ -32,22 +36,25 @@ void DBManager::close() {
     pthread_mutex_unlock(&clients_mutex);
 }
 
-bool DBManager::find_user(std::string user_login) {
+std::unique_ptr<User> DBManager::find_user(std::string user_login) {
     open();
     std::string login;
     std::string hashed_password;
     std::string salt;
-    while (!db.eof()) {
+
+    bool found_user = false;
+    while (!db.eof() && !found_user) {
         db >> login;
         if (login == user_login) {
-            close();
-            return true;
+            found_user = true;
         }
         db >> hashed_password;
         db >> salt;
     }
     close();
-    return false;
+    if (found_user)
+        return std::make_unique<User>(login, hashed_password, salt);
+    return nullptr;
 }
 
 

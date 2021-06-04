@@ -6,7 +6,7 @@
 #include <string>
 #include <fstream>
 #include <vector>
-#include "Date.h"
+#include "../../structures/Date.h"
 
 //new DBManager object when another database is accessed
 class DBScheduleManager {

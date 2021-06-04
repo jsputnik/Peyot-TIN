@@ -11,12 +11,7 @@ class UI {
     std::string request;
 public:
     UI(Client client);
-    bool handleLogin(); //if login/register successful, automatically logs into system
-    bool handleRegister();
-    bool handleBook();
-    bool handleResign();
-    bool handleModify();
-    bool handleCheck();
+    bool handle_request();
     void help();
 
     const std::string &getRequest() const;

@@ -34,7 +34,6 @@ void Server::start() {
 }
 
 void Server::stop() {
-    cout << "here" << endl;
     close(sock);
 }
 

@@ -38,9 +38,9 @@ string Client::receive() {
     return receiver.receive();
 }
 
-void Client::stop() {
+void Client::stop(int status_code) {
     send("quit");
-    if (receive() != "400 Logged out") {
+    if (status_code != 0) {
         cerr << "Finished forcefully" << endl;
     }
     close(sock);

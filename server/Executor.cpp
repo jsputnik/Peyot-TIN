@@ -7,22 +7,25 @@
 
 using namespace std;
 
-Executor::Executor(string request) {
-    this->request = request;
+Executor::Executor(unique_ptr<Request> request) {
+    this->request = std::move(request);
 }
 
 //return response ?
 void Executor::execute() {
-    cout << request << endl;
-    if (request == "quit") {
+    if (request == nullptr) {
+        setResponse("220 Couldn't parse request");
+        return;
+    }
+    if (request->getType() == RequestType::QUIT) {
         setResponse("400 Logged out");
         return;
     }
-    if (request == "register") {
+    if (request->getType() == RequestType::REGISTER) {
         registerUser();
         return;
     }
-    if (request == "login") {
+    if (request->getType() == RequestType::LOGIN) {
         loginUser();
         return;
     }
@@ -34,8 +37,10 @@ void Executor::execute() {
 
 void Executor::loginUser() {
     //for now hardcoded
-    string login = "mkwerc";
-    string password = "passwd";
+    string login = request->getUser().getLogin();
+    string password = request->getUser().getHashedPassword();
+//    string login = "mkwerc";
+//    string password = "passwd";
     DBManager dbManager("../server/database/clients");
     std::unique_ptr<User> user = dbManager.find_user(login);
     if (user == nullptr) {
@@ -50,7 +55,7 @@ void Executor::loginUser() {
     security_manager.hash_password(SecurityManager::merge_salt_with_password(salt, security_manager.getEncodedSaltLength(), password), hash_result, encoded_hash_result, SHA512_DIGEST_LENGTH);
     string encoded_hash_result_string = reinterpret_cast<char*>(encoded_hash_result);
     if (hash_string == encoded_hash_result_string) {
-        setResponse("101 Login successful");
+        setResponse("100 Login successful");
         return;
     }
     setResponse("210 Login unsuccessful");

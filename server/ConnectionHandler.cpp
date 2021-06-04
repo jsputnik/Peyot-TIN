@@ -3,6 +3,7 @@
 #include "ConnectionHandler.h"
 #include "security/SecurityManager.h"
 #include "Executor.h"
+#include "../parser/Parser.h"
 #include <pthread.h>
 #include <iostream>
 #include <sys/socket.h>
@@ -15,11 +16,10 @@ void* ConnectionHandler::handle_connection(void* args) {
     int sock = *(int*)args;
     Receiver receiver(sock);
     string request;
-    while(request != "quit") {
+    while (request != "quit") { //refactor later
         request = receiver.receive();
-        Executor executor(request);
-        //execute request
-        //dbmanager, securitymanager called in executor
+        Parser p(request);
+        Executor executor(p.parse_request());
         executor.execute();
         Sender sender(sock, executor.getResponse().c_str()); //TODO (?): move above while loop later
         sender.send_msg();

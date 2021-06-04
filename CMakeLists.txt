@@ -7,7 +7,7 @@ find_package (OpenSSL REQUIRED)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pthread(-D_REENTRANT, -lpthread)")
 
-add_executable(PeyotServer server/main.cpp server/Server.cpp server/Server.h communication/Sender.cpp communication/Sender.h communication/Receiver.cpp communication/Receiver.h server/ConnectionHandler.cpp server/ConnectionHandler.h server/database/DBManager.cpp server/database/DBManager.h  server/database/User.cpp server/database/User.h server/eventLog/ELManager.h server/eventLog/ELManager.cpp server/security/SecurityManager.cpp server/security/SecurityManager.h server/Executor.cpp server/Executor.h)
+add_executable(PeyotServer server/main.cpp server/Server.cpp server/Server.h communication/Sender.cpp communication/Sender.h communication/Receiver.cpp communication/Receiver.h server/ConnectionHandler.cpp server/ConnectionHandler.h server/database/DBManager.cpp server/database/DBManager.h  server/database/User.cpp server/database/User.h server/eventLog/ELManager.h server/eventLog/ELManager.cpp server/security/SecurityManager.cpp server/security/SecurityManager.h server/Executor.cpp server/Executor.h server/database/DBScheduleManager.cpp server/database/DBScheduleManager.h server/database/Date.cpp server/database/Date.h)
 add_executable(PeyotClient client/main.cpp client/Client.cpp client/Client.h communication/Sender.cpp communication/Sender.h communication/Receiver.cpp communication/Receiver.h client/UI/UI.cpp client/UI/UI.h)
 add_executable(tests libs/catch.hpp tests/SecurityTests.cpp)
 

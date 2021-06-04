@@ -8,7 +8,7 @@
 
 class Receiver {
     int sock;
-    static unsigned int buf_size;
+    int buf_size = 2048;
     char buf[2048];
 public:
     Receiver();

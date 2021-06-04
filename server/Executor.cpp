@@ -26,35 +26,30 @@ void Executor::execute() {
         loginUser();
         return;
     }
-    //if msg_rcvd == login -> loginUser
-    //if msg_rcvd == register -> registerUser
+    //if request == login -> loginUser
+    //if request == register -> registerUser
     //...
     setResponse("UNASSIGNED RESPONSE");
 }
 
 void Executor::loginUser() {
     //for now hardcoded
-    string login = "mkwerca";
+    string login = "mkwerc";
     string password = "passwd";
     DBManager dbManager("../server/database/clients");
-    //TODO: findSalt(login), findHashedPasswd(login)
-    /*
     std::unique_ptr<User> user = dbManager.find_user(login);
     if (user == nullptr) {
+        setResponse("210 Login unsuccessful");
         return; //user not found
     }
     string salt_string = user->getSalt();
     string hash_string = user->getHashedPassword();
-    */
-    string salt_string = "a3EtfdZ5Nc39m5IWxXQY/A==";
-    string hash_string = "uUUY7bsF43SPoMTNlE1iR5VjKF+NRRtctVXkv2X6oy+3SePviwJUJxa/FFhLciaviGt7JMDsjYgH6GcQpQzyAQ==";
     unsigned char* salt = reinterpret_cast<unsigned char*>(const_cast<char*>(salt_string.c_str()));
     unsigned char hash_result[SHA512_DIGEST_LENGTH];
     unsigned char encoded_hash_result[4*(SHA512_DIGEST_LENGTH+2)/3];
     security_manager.hash_password(SecurityManager::merge_salt_with_password(salt, security_manager.getEncodedSaltLength(), password), hash_result, encoded_hash_result, SHA512_DIGEST_LENGTH);
     string encoded_hash_result_string = reinterpret_cast<char*>(encoded_hash_result);
     if (hash_string == encoded_hash_result_string) {
-        cout << "Login successful" << endl;
         setResponse("101 Login successful");
         return;
     }

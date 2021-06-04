@@ -7,8 +7,6 @@
 
 using namespace std;
 
-unsigned int Receiver::buf_size = 2048;
-
 Receiver::Receiver() {
     this->sock = -1;
 }

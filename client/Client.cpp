@@ -41,7 +41,7 @@ string Client::receive() {
 void Client::stop() {
     send("quit");
     if (receive() != "400 Logged out") {
-        cerr << "Finished frocefully" << endl;
+        cerr << "Finished forcefully" << endl;
     }
     close(sock);
 }

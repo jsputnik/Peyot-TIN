@@ -4,16 +4,18 @@
 #define PEYOT_EXECUTOR_H
 
 
-#include "database/User.h"
+#include "../structures/User.h"
 #include "security/SecurityManager.h"
+#include "../parser/Request.h"
 #include <string>
+#include <memory>
 
 class Executor {
     SecurityManager security_manager;
-    std::string request;
+    std::unique_ptr<Request> request;
     std::string response;
 public:
-    Executor(std::string request);
+    Executor(std::unique_ptr<Request> request);
     void execute();
     void quitConnection();
     void loginUser();

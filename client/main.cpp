@@ -1,6 +1,5 @@
 //13.05.2021
 #include <iostream>
-#include <string>
 #include "Client.h"
 #include "UI/UI.h"
 
@@ -16,32 +15,15 @@ int main() {
     UI ui(client);
     long maxAttempts = 10;
     long attempt = 0;
-    string request;
-    getline(cin, request);
-    ui.setRequest(request);
-    while (ui.handleLogin() || ui.handleRegister()) {
+    while (ui.handle_request()) {
         ++attempt;
         cout << "Attempt: " << attempt << endl;
         if (attempt > maxAttempts) {
-            client.stop(); //disconnect
+            client.stop(1); //disconnect
             return 1;
         }
     }
-    client.stop();
-
-//    while (!ui.handleLogin() && !ui.handleRegister()) {
-//        ++attempt;
-//        if (attempt > maxAttempts) {
-//            client.stop(); //disconnect
-//        }
-//    }
-
-//    string msg = "";
-//    while (msg != "quit") {
-//       getline(cin, msg);
-//       client.send(msg.c_str());
-//       cout << client.receive() << endl;
-//    }
+    client.stop(0);
     return 0;
 }
 

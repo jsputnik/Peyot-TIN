@@ -6,7 +6,7 @@
 #include <fstream>
 #include <vector>
 #include <memory>
-#include "User.h"
+#include "../../structures/User.h"
 
 //tests:
 //DBManager dbManager("c:/Users/kislu/CLionProjects/Database/clients");

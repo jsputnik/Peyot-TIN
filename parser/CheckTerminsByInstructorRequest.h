@@ -17,7 +17,9 @@ public:
     }
 
     CheckTerminsByInstructorRequest(const std::string &keyword, const std::string &flag, const std::string &login)
-            : keyword(keyword), flag(flag), login(login) {}
+            : keyword(keyword), flag(flag), login(login) {
+        type = RequestType::CHECKTERMINSBYTRUCTOR;
+    }
 
     const std::string &getKeyword1() const {
         return keyword;

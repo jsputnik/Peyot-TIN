@@ -15,7 +15,9 @@ public:
         return type;
     }
 
-    CheckMyTerminsRequest(const std::string &keyword, const std::string &flag) : keyword(keyword), flag(flag) {}
+    CheckMyTerminsRequest(const std::string &keyword, const std::string &flag) : keyword(keyword), flag(flag) {
+        type = RequestType::CHECKMYTERMINS;
+    }
 
     const std::string &getKeyword1() const {
         return keyword;

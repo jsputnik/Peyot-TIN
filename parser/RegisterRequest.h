@@ -12,7 +12,9 @@ class RegisterRequest: public Request {
     User user;
 
 public:
-    RegisterRequest(std::string keyword, User user): keyword(keyword), user(user) {}
+    RegisterRequest(std::string keyword, User user): keyword(keyword), user(user) {
+        type = RequestType::LOGIN;
+    }
 
     RequestType getType() const {
         return type;

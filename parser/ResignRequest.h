@@ -18,7 +18,9 @@ public:
     }
 
     ResignRequest(const std::string &keyword, const std::string &login, const Date &date) : keyword(keyword),
-                                                                                            login(login), date(date) {}
+                                                                                            login(login), date(date) {
+        type = RequestType::RESIGN;
+    }
 
     const std::string &getKeyword1() const {
         return keyword;

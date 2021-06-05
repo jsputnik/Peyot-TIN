@@ -29,6 +29,27 @@ void Executor::execute() {
         loginUser();
         return;
     }
+    if (request->getType() == RequestType::BOOK) {
+        book();
+        return;
+    }
+    if (request->getType() == RequestType::RESIGN) {
+        resign();
+        return;
+    }
+    if (request->getType() == RequestType::MODIFY) {
+        modify();
+        return;
+    }
+    if (request->getType() == RequestType::CHECKMYTERMINS) {
+        check_my_termins();
+        return;
+    }
+    if (request->getType() == RequestType::CHECKTERMINSBYTRUCTOR) {
+        check_termins_by_instructor();
+        return;
+    }
+
     //if request == login -> loginUser
     //if request == register -> registerUser
     //...
@@ -88,8 +109,30 @@ const string &Executor::getResponse() const {
     return response;
 }
 
+void Executor::book() {
+    cout << "In book()" << endl;
+    setResponse("210 Login unsuccessful");
+}
+
 void Executor::resign() {
+    cout << "In resign()" << endl;
     string login = "testUser";
     Date date = Date("05.06.2021 19:00");
+    setResponse("210 Login unsuccessful");
 
+}
+
+void Executor::modify() {
+    cout << "In modify()" << endl;
+    setResponse("210 Login unsuccessful");
+}
+
+void Executor::check_my_termins() {
+    cout << "In check_my_termins()" << endl;
+    setResponse("210 Login unsuccessful");
+}
+
+void Executor::check_termins_by_instructor() {
+    cout << "In check_termins_by_instructor()" << endl;
+    setResponse("210 Login unsuccessful");
 }

@@ -22,7 +22,11 @@ public:
     void loginUser();
     void registerUser();
     void unregisterUser();
+    void book();
     void resign();
+    void modify();
+    void check_my_termins();
+    void check_termins_by_instructor();
 
     void setResponse(const std::string &response);
 

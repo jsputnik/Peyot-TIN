@@ -160,7 +160,28 @@ std::vector<Date>DBScheduleManager::find_by_instructor_and_client(std::string in
     return result;
 }
 
-std::unique_ptr<Date>
-DBScheduleManager::find(std::string instructor_login, std::string client_login, std::string start_time) {
-    return std::unique_ptr<Date>();
+std::unique_ptr<Date> DBScheduleManager::find(std::string ins_login, std::string cli_login, std::string start_time) {
+    open();
+    std::string line;
+    std::string start_date;
+    std::string end_date;
+    std::string instructor_login;
+    std::string client_login;
+    while (!db.eof()) {
+        std::getline(db, line);
+
+        size_t t1 = line.find("\t");
+        size_t t2 = line.find("\t", t1 + 1);
+        size_t t3 = line.find("\t", t2 + 1);
+
+        instructor_login = line.substr(t2 + 1, t3 - t2 - 1);
+        client_login = line.substr(t3 + 1, line.size() - t3 - 1);
+        start_date = line.substr(0, t1);
+        if (instructor_login == ins_login && client_login == cli_login && start_date == start_time) {
+            end_date = line.substr(t1 + 1, t2 - t1 - 1);
+            return std::make_unique<Date>(start_date, end_date, instructor_login, client_login);
+        };
+    }
+    close();
+    return nullptr;
 }

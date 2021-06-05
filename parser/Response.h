@@ -6,7 +6,9 @@
 #include <string>
 
 class Response {
-    int status_code;
+    int first;
+    int second;
+    int third;
     std::string message;
     std::string data; //no need to check if valid ?
 

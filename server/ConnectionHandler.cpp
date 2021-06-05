@@ -15,13 +15,13 @@ void* ConnectionHandler::handle_connection(void* args) {
     cout << "Handle connection..." << endl;
     int sock = *(int*)args;
     Receiver receiver(sock);
-    string request;
-    while (request != "quit") { //refactor later
-        request = receiver.receive();
-        Parser p(request);
+    string message;
+    while (message != "quit") { //refactor later
+        message = receiver.receive();
+        Parser p(message);
         Executor executor(p.parse_request());
         executor.execute();
-        Sender sender(sock, executor.getResponse().c_str()); //TODO (?): move above while loop later
+        Sender sender(sock, executor.getResponse().c_str());
         sender.send_msg();
     }
     cout << "Connection finished with client with socked id: " << sock << endl;

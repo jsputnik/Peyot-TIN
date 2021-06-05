@@ -12,6 +12,7 @@ class UI {
 public:
     UI(Client client);
     bool handle_request();
+    bool handle_response();
     void help();
 
     const std::string &getRequest() const;

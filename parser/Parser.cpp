@@ -93,7 +93,7 @@ unique_ptr<LoginRequest> Parser::parse_login_request() {
     if (current_index >= message.size() || (p = parse_password()) == nullopt) {
         return nullptr;
     }
-    return make_unique<LoginRequest>(*k, User(*l, *p, ""));
+    return make_unique<LoginRequest>(*k, *l, *p);
 }
 
 optional<string> Parser::parse_keyword(string keyword) {
@@ -166,7 +166,7 @@ unique_ptr<BookRequest> Parser::parse_book_request() {
     if (current_index >= message.size() || (d = parse_date()) == nullopt) {
         return nullptr;
     }
-    return make_unique<BookRequest>(*k, *l, Date(*d));
+    return make_unique<BookRequest>(*k, *l, *d);
 }
 
 std::unique_ptr<ResignRequest> Parser::parse_resign_request() {
@@ -192,7 +192,7 @@ std::unique_ptr<ResignRequest> Parser::parse_resign_request() {
         return nullptr;
     }
 
-    return make_unique<ResignRequest>(*k, *l, Date(*d));
+    return make_unique<ResignRequest>(*k, *l, *d);
 }
 
 unique_ptr<ModifyRequest> Parser::parse_modify_request() {
@@ -225,7 +225,7 @@ unique_ptr<ModifyRequest> Parser::parse_modify_request() {
     if (current_index >= message.size() || (d2 = parse_date()) == nullopt) {
         return nullptr;
     }
-    return make_unique<ModifyRequest>(*k, *l, Date(*d1), Date(*d2));
+    return make_unique<ModifyRequest>(*k, *l, *d1, *d2);
 }
 
 std::unique_ptr<CheckMyTerminsRequest> Parser::parse_check_my_termins_request() {

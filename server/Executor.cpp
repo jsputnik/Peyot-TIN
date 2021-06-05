@@ -57,11 +57,8 @@ void Executor::execute() {
 }
 
 void Executor::loginUser() {
-    //for now hardcoded
-    string login = request->getUser().getLogin();
-    string password = request->getUser().getHashedPassword();
-//    string login = "mkwerc";
-//    string password = "passwd";
+    string login = request->getLogin();
+    string password = request->getPassword();
     DBManager dbManager("../server/database/clients");
     std::unique_ptr<User> user = dbManager.find_user(login);
     if (user == nullptr) {
@@ -80,6 +77,7 @@ void Executor::loginUser() {
         return;
     }
     setResponse("210 Login unsuccessful");
+    //wrong password
 }
 
 void Executor::registerUser() {

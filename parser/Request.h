@@ -27,11 +27,19 @@ public:
         ;
     }
 
-    virtual const User &getUser() const {
-        return User("","","");
+    virtual const std::string &getLogin() const {
+        return "";
     }
 
-    virtual void setUser(const User &user) {
+    virtual void setLogin(const std::string &login) {
+        ;
+    }
+
+    virtual const std::string &getPassword() const {
+        return "";
+    }
+
+    virtual void setPassword(const std::string &password) {
         ;
     }
 

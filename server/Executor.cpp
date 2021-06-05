@@ -105,6 +105,9 @@ void Executor::registerUser() {
 }
 
 void Executor::setResponse(const string &response) {
+    ELManager elManager("../server/eventLog/logs");
+    elManager.save(response + "\n");
+    elManager.close();
     Executor::response = response;
 }
 

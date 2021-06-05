@@ -10,7 +10,7 @@
 class Server {
     ConnectionHandler handler;
     int sock;
-    struct sockaddr_in server;
+    struct sockaddr_in6 server;
     int backlog = 32;
 public:
     Server();

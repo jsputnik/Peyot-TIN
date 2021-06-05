@@ -8,6 +8,7 @@
 #include "security/SecurityManager.h"
 #include "../parser/Request.h"
 #include "../structures/Date.h"
+#include "eventLog/ELManager.h"
 #include <string>
 #include <memory>
 

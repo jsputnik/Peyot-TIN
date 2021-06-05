@@ -16,7 +16,7 @@ class ModifyRequest: public Request {
 public:
     ModifyRequest(const std::string &keyword, const std::string &login, const Date &old_date, const Date &new_date) : keyword(keyword),
                                                                                             login(login), old_date(old_date), new_date(new_date) {
-        type = RequestType::RESIGN;
+        type = RequestType::MODIFY;
     }
 
     RequestType getType() const {

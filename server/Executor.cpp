@@ -83,22 +83,24 @@ void Executor::loginUser() {
 }
 
 void Executor::registerUser() {
+    cout << "In register()" << endl;
+    setResponse("210 Login unsuccessful");
     //for now hardcoded
-    string login = "testuser";
-    string password = "testpasswd";
-    unsigned char salt[security_manager.getNotEncodedSaltLength()];
-    unsigned char encoded_salt[security_manager.getEncodedSaltLength()];
-    security_manager.generate_salt(encoded_salt, salt, security_manager.getNotEncodedSaltLength()); //encoded_salt_length
-    unsigned char hash[SHA512_DIGEST_LENGTH];
-    unsigned char encoded_hash[4*(SHA512_DIGEST_LENGTH+2)/3];
-    security_manager.hash_password(SecurityManager::merge_salt_with_password(encoded_salt, security_manager.getEncodedSaltLength(), password), hash, encoded_hash, SHA512_DIGEST_LENGTH);
-
-    DBManager dbManager("../server/database/clients");
-    //cast unsigned char to char
-    string hash_string = reinterpret_cast<char*>(encoded_hash);
-    string salt_string = reinterpret_cast<char*>(encoded_salt);
-    dbManager.add_user(User(login, hash_string, salt_string));
-    setResponse("101 Registration successful");
+//    string login = "testuser";
+//    string password = "testpasswd";
+//    unsigned char salt[security_manager.getNotEncodedSaltLength()];
+//    unsigned char encoded_salt[security_manager.getEncodedSaltLength()];
+//    security_manager.generate_salt(encoded_salt, salt, security_manager.getNotEncodedSaltLength()); //encoded_salt_length
+//    unsigned char hash[SHA512_DIGEST_LENGTH];
+//    unsigned char encoded_hash[4*(SHA512_DIGEST_LENGTH+2)/3];
+//    security_manager.hash_password(SecurityManager::merge_salt_with_password(encoded_salt, security_manager.getEncodedSaltLength(), password), hash, encoded_hash, SHA512_DIGEST_LENGTH);
+//
+//    DBManager dbManager("../server/database/clients");
+//    //cast unsigned char to char
+//    string hash_string = reinterpret_cast<char*>(encoded_hash);
+//    string salt_string = reinterpret_cast<char*>(encoded_salt);
+//    dbManager.add_user(User(login, hash_string, salt_string));
+//    setResponse("101 Registration successful");
 }
 
 void Executor::setResponse(const string &response) {

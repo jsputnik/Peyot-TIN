@@ -3,7 +3,7 @@
 #include "Request.h"
 
 Request::Request() {
-    type = RequestType::REGISTER;
+    type = RequestType::QUIT;
 }
 
 std::string Request::rtype_to_string() {

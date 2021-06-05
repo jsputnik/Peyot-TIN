@@ -11,9 +11,10 @@ class UI {
     std::string request;
 public:
     UI(Client client);
+    void get_request();
     bool handle_request();
     bool handle_response();
-    void help();
+    bool help();
 
     const std::string &getRequest() const;
     void setRequest(const std::string &request);

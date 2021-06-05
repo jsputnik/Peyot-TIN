@@ -11,13 +11,13 @@ UI::UI(Client client): client(client) {
     ;
 };
 
-bool UI::handle_request() {
+void UI::get_request() {
     getline(cin, request);
+}
+
+
+bool UI::handle_request() {
     cout << "Request: " << request << endl;
-    if (request == "help") {
-        help();
-        return true;
-    }
     //TODO: checkIfValid(request) with parser
     client.send(request.c_str());
     return true;
@@ -66,7 +66,10 @@ bool UI::handle_response() {
     return false;
 }
 
-void UI::help() {
+bool UI::help() {
+    if (request != "help") {
+        return false;
+    }
     cout << "Date format: [DD.MM.YYYY HH::MM]" << endl;
     cout << "Login: login [login] [password]" << endl;
     cout << "Register: register [login] [password]" << endl;
@@ -76,6 +79,7 @@ void UI::help() {
     cout << "Change termin as client: modify [instructor's login] [old_date] [new_date]" << endl;
     cout << "Check my termins as instructor or client: check -mytermins" << endl;
     cout << "Check my termins with given instructor: check -instermins [instructor's login]" << endl;
+    return true;
 }
 
 const string &UI::getRequest() const {

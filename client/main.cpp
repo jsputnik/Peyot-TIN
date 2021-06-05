@@ -15,13 +15,15 @@ int main() {
     UI ui(client);
     long maxAttempts = 10;
     long attempt = 0;
-    while (ui.handle_request() && ui.handle_response()) {
+    ui.get_request();
+    while (ui.help() || (ui.handle_request() && ui.handle_response())) {
         ++attempt;
         cout << "Attempt: " << attempt << endl;
         if (attempt > maxAttempts) {
             client.stop(1); //disconnect
             return 1;
         }
+        ui.get_request();
     }
     client.stop(0);
     return 0;

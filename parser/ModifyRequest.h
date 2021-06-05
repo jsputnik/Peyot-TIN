@@ -10,11 +10,11 @@
 class ModifyRequest: public Request {
     std::string keyword;
     std::string login;
-    Date old_date;
-    Date new_date;
+    std::string old_date;
+    std::string new_date;
 
 public:
-    ModifyRequest(const std::string &keyword, const std::string &login, const Date &old_date, const Date &new_date) : keyword(keyword),
+    ModifyRequest(const std::string &keyword, const std::string &login, const std::string &old_date, const std::string &new_date) : keyword(keyword),
                                                                                             login(login), old_date(old_date), new_date(new_date) {
         type = RequestType::MODIFY;
     }

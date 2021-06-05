@@ -10,14 +10,14 @@
 class ResignRequest: public Request {
     std::string keyword;
     std::string login;
-    Date date;
+    std::string date;
 
 public:
     RequestType getType() const {
         return type;
     }
 
-    ResignRequest(const std::string &keyword, const std::string &login, const Date &date) : keyword(keyword),
+    ResignRequest(const std::string &keyword, const std::string &login, const std::string &date) : keyword(keyword),
                                                                                             login(login), date(date) {
         type = RequestType::RESIGN;
     }
@@ -38,12 +38,12 @@ public:
         ResignRequest::login = login;
     }
 
-    const Date &getDate() const {
+    const std::string &getDate() const {
         return date;
     }
 
-    void setDate(const Date &date) {
-        ResignRequest::date = date;
+    void setDate(const std::string &date) {
+        this->date = date;
     }
 
 };

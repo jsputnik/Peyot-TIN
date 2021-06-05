@@ -10,10 +10,10 @@
 class BookRequest: public Request {
     std::string keyword;
     std::string login;
-    Date date;
+    std::string date;
 
 public:
-    BookRequest(const std::string &keyword, const std::string &login, const Date &date) : keyword(keyword),
+    BookRequest(const std::string &keyword, const std::string &login, const std::string &date) : keyword(keyword),
                                                                                                        login(login),
                                                                                                        date(date) {
         type = RequestType::BOOK;
@@ -37,14 +37,6 @@ public:
 
     void setLogin(const std::string &login) {
         BookRequest::login = login;
-    }
-
-    const Date &getDate() const {
-        return date;
-    }
-
-    void setDate(const Date &date) {
-        BookRequest::date = date;
     }
 
 };

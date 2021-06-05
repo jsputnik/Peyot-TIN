@@ -10,10 +10,11 @@
 
 class LoginRequest: public Request {
     std::string keyword;
-    User user;
+    std::string login;
+    std::string password;
 
 public:
-    LoginRequest(std::string keyword, User user): keyword(keyword), user(user) {
+    LoginRequest(std::string keyword, std::string login, std::string password): keyword(keyword), login(login), password(password) {
         type = RequestType::LOGIN;
     }
 
@@ -29,12 +30,20 @@ public:
         this->keyword = keyword;
     }
 
-    const User &getUser() const {
-        return user;
+    const std::string &getLogin() const {
+        return login;
     }
 
-    void setUser(const User &user) {
-        this->user = user;
+    void setLogin(const std::string &login) {
+        LoginRequest::login = login;
+    }
+
+    const std::string &getPassword() const {
+        return password;
+    }
+
+    void setPassword(const std::string &password) {
+        LoginRequest::password = password;
     }
 
 };

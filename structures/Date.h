@@ -9,14 +9,21 @@
 #include <iostream>
 
 class Date {
-    std::time_t start_time;
-    std::time_t end_time;
+    struct std::tm start_t;
+    struct std::tm end_t;
+
+    std::string client_login;
+    std::string instructor_login;
 public:
     Date();
     Date(std::string start_date, std::string end_date);
+    Date(std::string start_date, std::string end_date, std::string instructor_login, std::string client_login);
     Date(std::string start_date);
     void set_start(std::string date);
     void set_end(std::string date);
+    struct std::tm string_to_tm(std::string date);
+    void set_client_login(std::string client_login);
+    void set_instructor_login(std::string instructor_login);
     void print();
     std::string to_string();
 };

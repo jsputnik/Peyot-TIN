@@ -40,23 +40,38 @@ void DBScheduleManager::add_date(Date date) {
 
 void DBScheduleManager::find_all() {
     open();
-//    std::string login;
-//    std::string hashed_password;
-//    std::string salt;
     std::string line;
     std::string start_date;
     std::string end_date;
+    std::string instructor_login;
+    std::string client_login;
     while (!db.eof()) {
         std::getline(db, line);
+//        size_t x = line.find("\t");
+//        start_date = line.substr(0, x);
+//        end_date = line.substr(x+1, line.size()-x-1);
+
         size_t x = line.find("\t");
+        size_t y = line.find("\t", x + 1);
+        size_t z = line.find("\t", y + 1);
+
         start_date = line.substr(0, x);
-        end_date = line.substr(x+1, line.size()-x-1);
+        end_date = line.substr(x+1, y-x-1);
+        instructor_login = line.substr(y+1, z-y-1);
+        client_login = line.substr(z+1, line.size()-z-1);
+
+
 
 //        std::cout << "line: \t" << line << std::endl;
 //        std::cout << "start: \t" << start_date << std::endl;
 //        std::cout << "end: \t" << end_date << std::endl;
 
-        dates.push_back(Date(start_date, end_date));
+
+//        start_date = "14.05.2021 16:15";
+//        end_date = "14.05.2021 16:15";
+//        instructor_login = "instruktor";
+//        client_login = "klient";
+        dates.push_back(Date(start_date, end_date, instructor_login, client_login));
     }
     close();
 }
@@ -64,6 +79,7 @@ void DBScheduleManager::find_all() {
 void DBScheduleManager::test_print() {
     std::cout << "Schedule:" << std::endl;
     for (Date date : dates) {
-        std::cout << date.to_string() << std::endl;
+        date.print();
+        //std::cout << date.to_string() << std::endl;
     }
 }

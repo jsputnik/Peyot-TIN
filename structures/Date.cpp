@@ -84,11 +84,12 @@ void Date::print() {
 
 std::string Date::to_string() {
     std::stringstream temp;
-    struct std::tm tm;
-//    tm = *std::localtime(&start_time);
-//    temp << std::put_time(&tm, "%d.%m.%Y %H:%M");
+    temp << std::put_time(&start_t, "%d.%m.%Y %H:%M");
     temp << '\t';
-//    tm = *std::localtime(&end_time);
-//    temp << std::put_time(&tm, "%d.%m.%Y %H:%M");
+    temp << std::put_time(&end_t, "%d.%m.%Y %H:%M");
+    temp << '\t';
+    temp << instructor_login;
+    temp << '\t';
+    temp << client_login;
     return temp.str();
 }

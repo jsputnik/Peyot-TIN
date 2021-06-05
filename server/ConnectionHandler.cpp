@@ -21,12 +21,12 @@ void* ConnectionHandler::handle_connection(void* args) {
         Parser parser(message);
         Executor executor(parser.parse_request());
         executor.execute();
-        message = executor.getResponse();
-        parser.init(message);
+        string response_message = executor.getResponse();
+        parser.init(response_message);
         if (parser.parse_response() == nullptr) {
-            message = "321 Incorrect response";
+            response_message = "321 Incorrect response";
         }
-        Sender sender(sock, message.c_str());
+        Sender sender(sock, response_message.c_str());
         sender.send_msg();
     }
     cout << "Connection finished with client with socked id: " << sock << endl;

@@ -173,7 +173,7 @@ std::unique_ptr<CheckMyTerminsRequest> Parser::parse_check_my_termins_request() 
     ++current_index;
 
     optional<string> f;
-    if (current_index >= message.size() || (f = parse_flag("-mytermins")) == nullopt) {
+    if (current_index >= message.size() || (f = parse_flag("mytermins")) == nullopt) {
         return nullptr;
     }
 
@@ -192,7 +192,7 @@ std::unique_ptr<CheckTerminsByInstructorRequest> Parser::parse_check_termins_by_
     ++current_index;
 
     optional<string> f;
-    if (current_index >= message.size() || (f = parse_flag("-instermins")) == nullopt) {
+    if (current_index >= message.size() || (f = parse_flag("instermins")) == nullopt) {
         return nullptr;
     }
     if (current_index >= message.size() || message[current_index] != ' ') {

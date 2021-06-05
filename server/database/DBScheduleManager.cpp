@@ -46,6 +46,10 @@ void DBScheduleManager::add_date(Date date) {
 
 bool DBScheduleManager::modify_date(std::string old_instructor_login, std::string old_client_login,
                                     std::string old_start_time, Date new_date) {
+    if (delete_date(old_instructor_login, old_client_login, old_start_time)) {
+        add_date(new_date);
+        return true;
+    }
     return false;
 }
 

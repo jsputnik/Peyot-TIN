@@ -10,7 +10,11 @@ class Response {
     int second;
     int third;
     std::string message;
-    std::string data; //no need to check if valid ?
+
+public:
+    Response(int first, int second, int third, const std::string &message) : first(
+            first), second(second), third(third), message(message) {
+    }
 
 };
 

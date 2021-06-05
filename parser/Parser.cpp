@@ -2,6 +2,8 @@
 
 #include "Parser.h"
 #include <iostream>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -272,6 +274,42 @@ std::unique_ptr<CheckTerminsByInstructorRequest> Parser::parse_check_termins_by_
     }
 
     return make_unique<CheckTerminsByInstructorRequest>(*k, *f, *l);
+}
+
+std::unique_ptr<Response> Parser::parse_response() {
+    int first;
+    std::vector<int> first_digit{1,2,3,4};
+    if(current_index >= message.size() || !isdigit(message[current_index]) || std::find(std::begin(first_digit), std::end(first_digit), message[current_index] - '0') == std::end(first_digit)) {
+        return nullptr;
+    }
+    first = message[current_index] - '0';
+    ++current_index;
+    int second;
+    std::vector<int> second_digit{0,1,2,3,4,5};
+    if(current_index >= message.size() || !isdigit(message[current_index]) || std::find(std::begin(second_digit), std::end(second_digit), message[current_index] - '0') == std::end(second_digit)) {
+        return nullptr;
+    }
+    second = message[current_index] - '0';
+    ++current_index;
+    int third;
+    std::vector<int> third_digit{0,1,2,3,4,5,6,7,8,9};
+    if(current_index >= message.size() || !isdigit(message[current_index]) || std::find(std::begin(third_digit), std::end(third_digit), message[current_index] - '0') == std::end(third_digit)) {
+        return nullptr;
+    }
+    third = message[current_index] - '0';
+    ++current_index;
+
+    if (current_index >= message.size() || message[current_index] != ' ') {
+        return nullptr;
+    }
+    ++current_index;
+
+    string m;
+    while(current_index < message.size()) {
+        m += message[current_index];
+        ++current_index;
+    }
+    return make_unique<Response>(first, second, third, m);
 }
 
 std::optional<std::string> Parser::parse_date() {

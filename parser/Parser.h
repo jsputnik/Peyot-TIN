@@ -12,6 +12,7 @@
 #include "ModifyRequest.h"
 #include "CheckMyTerminsRequest.h"
 #include "CheckTerminsByInstructorRequest.h"
+#include "Response.h"
 #include <optional>
 #include <memory>
 
@@ -29,6 +30,7 @@ public:
     std::unique_ptr<ModifyRequest> parse_modify_request();
     std::unique_ptr<CheckMyTerminsRequest> parse_check_my_termins_request();
     std::unique_ptr<CheckTerminsByInstructorRequest> parse_check_termins_by_instructor_request();
+    std::unique_ptr<Response> parse_response();
     std::optional<std::string> parse_keyword(std::string keyword);
     std::optional<std::string> parse_login();
     std::optional<std::string> parse_password();

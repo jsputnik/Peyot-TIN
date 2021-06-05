@@ -14,6 +14,22 @@ std::string Request::rtype_to_string() {
             return "LOGIN";
         case RequestType::REGISTER:
             return "REGISTER";
+        case RequestType::UNREGISTER:
+            return "UNREGISTER";
+        case RequestType::BOOK:
+            return "BOOK";
+        case RequestType::RESIGN:
+            return "RESIGN";
+        case RequestType::MODIFY:
+            return "MODIFY";
+        case RequestType::CHECKMYTERMINS:
+            return "CHECKMYTERMINS";
+        case RequestType::CHECKINSTRUCTORS:
+            return "CHECKINSTRUCTORS";
+        case RequestType::CHECKTERMINSBYTRUCTOR:
+            return "CHECKTERMINSBYINSTRUCTOR";
+        case RequestType::SETSCHEDULE:
+            return "SETSCHEDULE";
     }
 }
 

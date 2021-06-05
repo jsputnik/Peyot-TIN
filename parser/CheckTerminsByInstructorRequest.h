@@ -15,6 +15,33 @@ public:
     RequestType getType() const {
         return type;
     }
+
+    CheckTerminsByInstructorRequest(const std::string &keyword, const std::string &flag, const std::string &login)
+            : keyword(keyword), flag(flag), login(login) {}
+
+    const std::string &getKeyword1() const {
+        return keyword;
+    }
+
+    void setKeyword1(const std::string &keyword) {
+        CheckTerminsByInstructorRequest::keyword = keyword;
+    }
+
+    const std::string &getFlag() const {
+        return flag;
+    }
+
+    void setFlag(const std::string &flag) {
+        CheckTerminsByInstructorRequest::flag = flag;
+    }
+
+    const std::string &getLogin() const {
+        return login;
+    }
+
+    void setLogin(const std::string &login) {
+        CheckTerminsByInstructorRequest::login = login;
+    }
 };
 
 

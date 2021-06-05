@@ -7,6 +7,7 @@
 #include "../structures/User.h"
 #include "security/SecurityManager.h"
 #include "../parser/Request.h"
+#include "../structures/Date.h"
 #include <string>
 #include <memory>
 
@@ -21,6 +22,7 @@ public:
     void loginUser();
     void registerUser();
     void unregisterUser();
+    void resign();
 
     void setResponse(const std::string &response);
 

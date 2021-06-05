@@ -10,6 +10,10 @@ Date::Date(std::string start_date, std::string end_date) {
     set_end(end_date);
 }
 
+Date::Date(std::string start_date) : end_time(std::time(nullptr)) {
+    set_start(start_date);
+}
+
 void Date::set_start(std::string date) {
     time_t now = std::time(nullptr);
     struct std::tm t_now = *std::localtime(&now);

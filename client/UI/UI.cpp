@@ -1,6 +1,7 @@
 //29.05.2021
 
 #include "UI.h"
+#include "../../parser/Parser.h"
 #include <iostream>
 
 using namespace std;
@@ -18,49 +19,43 @@ void UI::get_request() {
 
 bool UI::handle_request() {
     cout << "Request: " << request << endl;
-    //TODO: checkIfValid(request) with parser
+    parser.init(request);
+    if (parser.parse_request() == nullptr) {
+        cout << "Client error" << endl;
+        cout << "221 Tried to send incorrect request" << endl;
+        return true;
+    }
     client.send(request.c_str());
-    return true;
+    return handle_response();
 }
 
 bool UI::handle_response() {
-    string response = client.receive();
-    cout << "Response: " << response << endl;
-    //TODO: checkIfValid(response) with parser
-    //if (client.isValid(response)) return true;
-    //return false;
-    //
-    //if (response->getFirst() == 1) return true; //success
-    //if (response->getFirst() == 2) return true; //client error
-    //if (response->getFirst() == 2) return true; //server error
-    //if (response->getFirst() == 4) return false; //quit
-    //if (response->getFirst() == 5) return true; //other
-
-    if (response == "100 Login successful") {
-        cout << "Logged in successfully" << endl;
+    string message = client.receive();
+    cout << "Response: " << message << endl;
+    parser.init(message);
+    unique_ptr<Response> response = parser.parse_response();
+    if (response == nullptr) {
+        cout << "Server error" << endl;
+        cout << "320 Couldn't parse server response" << endl;
         return true;
     }
-    if (response == "240 Login unsuccessful") {
-        cout << "Couldn't login" << endl;
+    if (response->getFirst() == 1) {
+        cout << "Success" << endl;
+        cout << response->getMessage() << endl;
         return true;
     }
-    if (response == "220 Couldn't parse request") {
-        cout << "Couldn't parse request" << endl;
+    if (response->getFirst() == 2) {
+        cout << "Client error" << endl;
+        cout << response->getMessage() << endl;
         return true;
     }
-    if (response == "101 Register successful") {
-        cout << "Registered successfully" << endl;
+    if (response->getFirst() == 3) {
+        cout << "Server error" << endl;
+        cout << response->getMessage() << endl;
         return true;
     }
-    if (response == "241 Register unsuccessful") {
-        cout << "Couldn't register" << endl;
-        return true;
-    }
-    if (response == "104 Modification successful") {
-        cout << "Modification successful" << endl;
-        return true;
-    }
-    if (response == "400 Logged out") {
+    if (response->getFirst() == 4) {
+        cout << response->getMessage() << endl;
         return false;
     }
     return false;

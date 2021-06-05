@@ -7,7 +7,10 @@
 
 using namespace std;
 
-//TODO: change date in requests to time_t or string
+void Parser::init(string message) {
+    current_index = 0;
+    this->message = message;
+}
 
 std::unique_ptr<Request> Parser::parse_request() {
     unique_ptr<Request> r;
@@ -427,6 +430,22 @@ std::optional<std::string> Parser::parse_date() {
     ++current_index;
 
     return date;
+}
+
+const string &Parser::getMessage() const {
+    return message;
+}
+
+void Parser::setMessage(const string &message) {
+    Parser::message = message;
+}
+
+int Parser::getCurrentIndex() const {
+    return current_index;
+}
+
+void Parser::setCurrentIndex(int currentIndex) {
+    current_index = currentIndex;
 }
 
 

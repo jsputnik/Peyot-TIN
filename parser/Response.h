@@ -16,6 +16,22 @@ public:
             first), second(second), third(third), message(message) {
     }
 
+    int getFirst() const {
+        return first;
+    }
+
+    int getSecond() const {
+        return second;
+    }
+
+    int getThird() const {
+        return third;
+    }
+
+    const std::string &getMessage() const {
+        return message;
+    }
+
 };
 
 

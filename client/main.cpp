@@ -16,7 +16,7 @@ int main() {
     long maxAttempts = 10;
     long attempt = 0;
     ui.get_request();
-    while (ui.help() || (ui.handle_request() && ui.handle_response())) {
+    while (ui.help() || (ui.handle_request())) {
         ++attempt;
         cout << "Attempt: " << attempt << endl;
         if (attempt > maxAttempts) {

@@ -5,9 +5,14 @@
 
 using namespace std;
 
+//TODO: change date in requests to time_t or string
+
 std::unique_ptr<Request> Parser::parse_request() {
     unique_ptr<Request> r;
     if ((r = parse_quit_request()) != nullptr) {
+        return r;
+    }
+    if ((r = parse_register_request()) != nullptr) {
         return r;
     }
     if ((r = parse_login_request()) != nullptr) {
@@ -17,6 +22,9 @@ std::unique_ptr<Request> Parser::parse_request() {
         return r;
     }
     if ((r = parse_resign_request()) != nullptr) {
+        return r;
+    }
+    if ((r = parse_modify_request()) != nullptr) {
         return r;
     }
     if ((r = parse_check_my_termins_request()) != nullptr) {
@@ -36,6 +44,32 @@ unique_ptr<QuitRequest> Parser::parse_quit_request() {
     }
     return make_unique<QuitRequest>(*k);
 }
+
+unique_ptr<RegisterRequest> Parser::parse_register_request() {
+    current_index = 0;
+    optional<string> k;
+    if (current_index >= message.size() || (k = parse_keyword("register")) == nullopt) {
+        return nullptr;
+    }
+    if (current_index >= message.size() || message[current_index] != ' ') {
+        return nullptr;
+    }
+    ++current_index;
+    optional<string> l;
+    if (current_index >= message.size() || (l = parse_login()) == nullopt) {
+        return nullptr;
+    }
+    if (current_index >= message.size() || message[current_index] != ' ') {
+        return nullptr;
+    }
+    ++current_index;
+    optional<string> p;
+    if (current_index >= message.size() || (p = parse_password()) == nullopt) {
+        return nullptr;
+    }
+    return make_unique<RegisterRequest>(*k, *l, *p);
+}
+
 
 unique_ptr<LoginRequest> Parser::parse_login_request() {
     current_index = 0;
@@ -159,6 +193,39 @@ std::unique_ptr<ResignRequest> Parser::parse_resign_request() {
     }
 
     return make_unique<ResignRequest>(*k, *l, Date(*d));
+}
+
+unique_ptr<ModifyRequest> Parser::parse_modify_request() {
+    current_index = 0;
+    optional<string> k;
+    if (current_index >= message.size() || (k = parse_keyword("modify")) == nullopt) {
+        return nullptr;
+    }
+    if (current_index >= message.size() || message[current_index] != ' ') {
+        return nullptr;
+    }
+    ++current_index;
+    optional<string> l;
+    if (current_index >= message.size() || (l = parse_login()) == nullopt) {
+        return nullptr;
+    }
+    if (current_index >= message.size() || message[current_index] != ' ') {
+        return nullptr;
+    }
+    ++current_index;
+    optional<string> d1;
+    if (current_index >= message.size() || (d1 = parse_date()) == nullopt) {
+        return nullptr;
+    }
+    if (current_index >= message.size() || message[current_index] != ' ') {
+        return nullptr;
+    }
+    ++current_index;
+    optional<string> d2;
+    if (current_index >= message.size() || (d2 = parse_date()) == nullopt) {
+        return nullptr;
+    }
+    return make_unique<ModifyRequest>(*k, *l, Date(*d1), Date(*d2));
 }
 
 std::unique_ptr<CheckMyTerminsRequest> Parser::parse_check_my_termins_request() {

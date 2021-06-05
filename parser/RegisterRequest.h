@@ -9,11 +9,12 @@
 
 class RegisterRequest: public Request {
     std::string keyword;
-    User user;
+    std::string login;
+    std::string password;
 
 public:
-    RegisterRequest(std::string keyword, User user): keyword(keyword), user(user) {
-        type = RequestType::LOGIN;
+    RegisterRequest(std::string keyword, std::string login, std::string password): keyword(keyword), login(login), password(password) {
+        type = RequestType::REGISTER;
     }
 
     RequestType getType() const {
@@ -28,12 +29,20 @@ public:
         RegisterRequest::keyword = keyword;
     }
 
-    const User &getUser() const {
-        return user;
+    const std::string &getLogin() const {
+        return login;
     }
 
-    void setUser(const User &user) {
-        RegisterRequest::user = user;
+    void setLogin(const std::string &login) {
+        RegisterRequest::login = login;
+    }
+
+    const std::string &getPassword() const {
+        return password;
+    }
+
+    void setPassword(const std::string &password) {
+        RegisterRequest::password = password;
     }
 
 };

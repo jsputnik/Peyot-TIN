@@ -87,3 +87,9 @@ void Executor::setResponse(const string &response) {
 const string &Executor::getResponse() const {
     return response;
 }
+
+void Executor::resign() {
+    string login = "testUser";
+    Date date = Date("05.06.2021 19:00");
+
+}

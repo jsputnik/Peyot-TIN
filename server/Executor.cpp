@@ -122,12 +122,15 @@ void Executor::resign() {
     string login = "testUser";
     Date date = Date("05.06.2021 19:00");
     setResponse("240 Login unsuccessful");
-
 }
 
 void Executor::modify() {
     cout << "In modify()" << endl;
-    setResponse("240 Login unsuccessful");
+    //data = login, old_date, new_date
+    //if (Termin = findByStartDateAndLogin == nullptr) return error
+    //update(Termin new Termin(data)) -> remove 7 add to schedules
+    //add
+    setResponse("104 Modification successful");
 }
 
 void Executor::check_my_termins() {

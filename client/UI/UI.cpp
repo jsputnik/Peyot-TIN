@@ -14,6 +14,10 @@ UI::UI(Client client): client(client) {
 bool UI::handle_request() {
     getline(cin, request);
     cout << "Request: " << request << endl;
+    if (request == "help") {
+        help();
+        return true;
+    }
     //TODO: checkIfValid(request) with parser
     client.send(request.c_str());
     return true;
@@ -50,6 +54,10 @@ bool UI::handle_response() {
     }
     if (response == "241 Register unsuccessful") {
         cout << "Couldn't register" << endl;
+        return true;
+    }
+    if (response == "104 Modification successful") {
+        cout << "Modification successful" << endl;
         return true;
     }
     if (response == "400 Logged out") {

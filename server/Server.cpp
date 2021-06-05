@@ -14,7 +14,7 @@ Server::Server() {
         exit(1);
     }
     server.sin_family = AF_INET;
-    server.sin_addr.s_addr = inet_addr("127.0.0.1"); //deprecated
+    server.sin_addr.s_addr = inet_addr("192.168.177.128"); //deprecated
     server.sin_port = htons(45265);
     if (bind(sock, (struct sockaddr *) &server, sizeof server) != 0) {
         cerr << "Bind call error" << endl; //error handler

@@ -14,6 +14,24 @@ public:
     RequestType getType() const {
         return type;
     }
+
+    CheckMyTerminsRequest(const std::string &keyword, const std::string &flag) : keyword(keyword), flag(flag) {}
+
+    const std::string &getKeyword1() const {
+        return keyword;
+    }
+
+    void setKeyword1(const std::string &keyword) {
+        CheckMyTerminsRequest::keyword = keyword;
+    }
+
+    const std::string &getFlag() const {
+        return flag;
+    }
+
+    void setFlag(const std::string &flag) {
+        CheckMyTerminsRequest::flag = flag;
+    }
 };
 
 

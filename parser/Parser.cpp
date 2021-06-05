@@ -78,7 +78,7 @@ optional<string> Parser::parse_keyword(string keyword) {
 std::optional<std::string> Parser::parse_flag(std::string flag) {
     string f;
     if (current_index >= message.size() || message[current_index] != '-') {
-        return nullptr;
+        return nullopt;
     }
     ++current_index;
     while(current_index < message.size()) {

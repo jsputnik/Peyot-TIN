@@ -62,7 +62,7 @@ void Executor::loginUser() {
     DBManager dbManager("../server/database/clients");
     std::unique_ptr<User> user = dbManager.find_user(login);
     if (user == nullptr) {
-        setResponse("210 Login unsuccessful");
+        setResponse("240 Login unsuccessful");
         return; //user not found
     }
     string salt_string = user->getSalt();
@@ -76,29 +76,32 @@ void Executor::loginUser() {
         setResponse("100 Login successful");
         return;
     }
-    setResponse("210 Login unsuccessful");
+    setResponse("240 Login unsuccessful");
     //wrong password
 }
 
 void Executor::registerUser() {
     cout << "In register()" << endl;
-    setResponse("210 Login unsuccessful");
-    //for now hardcoded
-//    string login = "testuser";
-//    string password = "testpasswd";
-//    unsigned char salt[security_manager.getNotEncodedSaltLength()];
-//    unsigned char encoded_salt[security_manager.getEncodedSaltLength()];
-//    security_manager.generate_salt(encoded_salt, salt, security_manager.getNotEncodedSaltLength()); //encoded_salt_length
-//    unsigned char hash[SHA512_DIGEST_LENGTH];
-//    unsigned char encoded_hash[4*(SHA512_DIGEST_LENGTH+2)/3];
-//    security_manager.hash_password(SecurityManager::merge_salt_with_password(encoded_salt, security_manager.getEncodedSaltLength(), password), hash, encoded_hash, SHA512_DIGEST_LENGTH);
-//
-//    DBManager dbManager("../server/database/clients");
-//    //cast unsigned char to char
-//    string hash_string = reinterpret_cast<char*>(encoded_hash);
-//    string salt_string = reinterpret_cast<char*>(encoded_salt);
-//    dbManager.add_user(User(login, hash_string, salt_string));
-//    setResponse("101 Registration successful");
+    string login = request->getLogin();
+    string password = request->getPassword();
+    DBManager dbManager("../server/database/clients");
+    std::unique_ptr<User> user = dbManager.find_user(login);
+    if (user != nullptr) {
+        setResponse("241 Register unsuccessful");
+        return; //user already exists
+    }
+    unsigned char salt[security_manager.getNotEncodedSaltLength()];
+    unsigned char encoded_salt[security_manager.getEncodedSaltLength()];
+    security_manager.generate_salt(encoded_salt, salt, security_manager.getNotEncodedSaltLength()); //encoded_salt_length
+    unsigned char hash[SHA512_DIGEST_LENGTH];
+    unsigned char encoded_hash[4*(SHA512_DIGEST_LENGTH+2)/3];
+    security_manager.hash_password(SecurityManager::merge_salt_with_password(encoded_salt, security_manager.getEncodedSaltLength(), password), hash, encoded_hash, SHA512_DIGEST_LENGTH);
+
+    //cast unsigned char to char
+    string hash_string = reinterpret_cast<char*>(encoded_hash);
+    string salt_string = reinterpret_cast<char*>(encoded_salt);
+    dbManager.add_user(User(login, hash_string, salt_string));
+    setResponse("101 Registration successful");
 }
 
 void Executor::setResponse(const string &response) {
@@ -111,28 +114,31 @@ const string &Executor::getResponse() const {
 
 void Executor::book() {
     cout << "In book()" << endl;
-    setResponse("210 Login unsuccessful");
+    setResponse("240 Login unsuccessful");
 }
 
 void Executor::resign() {
     cout << "In resign()" << endl;
     string login = "testUser";
     Date date = Date("05.06.2021 19:00");
-    setResponse("210 Login unsuccessful");
-
+    setResponse("240 Login unsuccessful");
 }
 
 void Executor::modify() {
     cout << "In modify()" << endl;
-    setResponse("210 Login unsuccessful");
+    //data = login, old_date, new_date
+    //if (Termin = findByStartDateAndLogin == nullptr) return error
+    //update(Termin new Termin(data)) -> remove 7 add to schedules
+    //add
+    setResponse("104 Modification successful");
 }
 
 void Executor::check_my_termins() {
     cout << "In check_my_termins()" << endl;
-    setResponse("210 Login unsuccessful");
+    setResponse("240 Login unsuccessful");
 }
 
 void Executor::check_termins_by_instructor() {
     cout << "In check_termins_by_instructor()" << endl;
-    setResponse("210 Login unsuccessful");
+    setResponse("240 Login unsuccessful");
 }

@@ -19,7 +19,7 @@ void DBScheduleManager::open() {
 
 
     std::getline(db, line);
-    if (line != "<start_time-end_time>") {
+    if (line != "<start_time-end_time-instructor_login-client_login>") {
         std::cerr << db_name <<" is not schedule database" << std::endl;
         //exit()
     }
@@ -27,6 +27,12 @@ void DBScheduleManager::open() {
 
 void DBScheduleManager::close() {
     db.close();
+}
+
+void DBScheduleManager::replace_and_close(const char* temp_file) {
+    db.close();
+    remove(db_name.c_str());
+    rename(temp_file, db_name.c_str());
 }
 
 DBScheduleManager::DBScheduleManager(std::string db_name) : db_name(std::move(db_name)) {
@@ -38,13 +44,42 @@ void DBScheduleManager::add_date(Date date) {
     close();
 }
 
-void DBScheduleManager::modify_date(std::string old_instructor_login, std::string old_client_login,
+bool DBScheduleManager::modify_date(std::string old_instructor_login, std::string old_client_login,
                                     std::string old_start_time, Date new_date) {
-
+    return false;
 }
 
-void DBScheduleManager::delete_date(std::string instructor_login, std::string client_login, std::string start_time) {
+bool DBScheduleManager::delete_date(std::string ins_login, std::string cli_login, std::string start_time) {
+    open();
+    bool result = false;
+    std::ofstream temp;
+    temp.open("../server/database/temp", std::ofstream::out);
+    temp << "<SCHEDULE DATABASE>\n"
+         << "<start_time-end_time-instructor_login-client_login>";
+    std::string line;
+    std::string start_date;
+    std::string instructor_login;
+    std::string client_login;
+    while (!db.eof()) {
+        std::getline(db, line);
 
+        size_t t1 = line.find("\t");
+        size_t t2 = line.find("\t", t1 + 1);
+        size_t t3 = line.find("\t", t2 + 1);
+
+        instructor_login = line.substr(t2 + 1, t3 - t2 - 1);
+        client_login = line.substr(t3 + 1, line.size() - t3 - 1);
+        start_date = line.substr(0, t1);
+        if (instructor_login != ins_login || client_login != cli_login || start_date != start_time) {
+            temp << '\n' << line ;
+        }
+        else {
+            result = true;
+        }
+    }
+    temp.close();
+    replace_and_close("../server/database/temp");
+    return result;
 }
 
 void DBScheduleManager::find_all() {

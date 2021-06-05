@@ -20,11 +20,12 @@ class DBScheduleManager {
 
     void open();
     void close();
+    void replace_and_close(const char* temp_file);
 public:
     DBScheduleManager(std::string db_name);
     void add_date(Date date);
-    void modify_date(std::string old_instructor_login, std::string old_client_login, std::string old_start_time, Date new_date);
-    void delete_date(std::string instructor_login, std::string client_login, std::string start_time);
+    bool modify_date(std::string old_instructor_login, std::string old_client_login, std::string old_start_time, Date new_date);
+    bool delete_date(std::string instructor_login, std::string client_login, std::string start_time);
     std::vector<Date> find_by_client(std::string login);
     std::vector<Date> find_by_instructor(std::string login);
     std::vector<Date> find_by_instructor_and_client(std::string instructor_login, std::string client_login);

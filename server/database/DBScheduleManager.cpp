@@ -38,6 +38,15 @@ void DBScheduleManager::add_date(Date date) {
     close();
 }
 
+void DBScheduleManager::modify_date(std::string old_instructor_login, std::string old_client_login,
+                                    std::string old_start_time, Date new_date) {
+
+}
+
+void DBScheduleManager::delete_date(std::string instructor_login, std::string client_login, std::string start_time) {
+
+}
+
 void DBScheduleManager::find_all() {
     open();
     std::string line;
@@ -70,8 +79,9 @@ void DBScheduleManager::test_print() {
     }
 }
 
-std::unique_ptr<Date> DBScheduleManager::find_by_client(std::string login) {
+std::vector<Date> DBScheduleManager::find_by_client(std::string login) {
     open();
+    std::vector<Date> result;
     std::string line;
     std::string start_date;
     std::string end_date;
@@ -89,16 +99,16 @@ std::unique_ptr<Date> DBScheduleManager::find_by_client(std::string login) {
             start_date = line.substr(0, t1);
             end_date = line.substr(t1 + 1, t2 - t1 - 1);
             instructor_login = line.substr(t2 + 1, t3 - t2 - 1);
-            close();
-            return std::make_unique<Date>(start_date, end_date, instructor_login, client_login);
+            result.push_back(Date(start_date, end_date, instructor_login, client_login));
         };
     }
     close();
-    return nullptr;
+    return result;
 }
 
-std::unique_ptr<Date> DBScheduleManager::find_by_instructor(std::string login) {
+std::vector<Date> DBScheduleManager::find_by_instructor(std::string login) {
     open();
+    std::vector<Date> result;
     std::string line;
     std::string start_date;
     std::string end_date;
@@ -116,16 +126,16 @@ std::unique_ptr<Date> DBScheduleManager::find_by_instructor(std::string login) {
             start_date = line.substr(0, t1);
             end_date = line.substr(t1 + 1, t2 - t1 - 1);
             client_login = line.substr(t3 + 1, line.size() - t3 - 1);
-            close();
-            return std::make_unique<Date>(start_date, end_date, instructor_login, client_login);
+            result.push_back(Date(start_date, end_date, instructor_login, client_login));
         };
     }
     close();
-    return nullptr;
+    return result;
 }
 
-std::unique_ptr<Date> DBScheduleManager::find_by_instructor_and_start(std::string login, std::string start_time) {
+std::vector<Date>DBScheduleManager::find_by_instructor_and_client(std::string ins_login, std::string cli_login) {
     open();
+    std::vector<Date> result;
     std::string line;
     std::string start_date;
     std::string end_date;
@@ -138,15 +148,19 @@ std::unique_ptr<Date> DBScheduleManager::find_by_instructor_and_start(std::strin
         size_t t2 = line.find("\t", t1 + 1);
         size_t t3 = line.find("\t", t2 + 1);
 
-        start_date = line.substr(0, t1);
         instructor_login = line.substr(t2 + 1, t3 - t2 - 1);
-        if (instructor_login == login && start_date == start_time) {
+        client_login = line.substr(t3 + 1, line.size() - t3 - 1);
+        if (instructor_login == ins_login && client_login == cli_login) {
+            start_date = line.substr(0, t1);
             end_date = line.substr(t1 + 1, t2 - t1 - 1);
-            client_login = line.substr(t3 + 1, line.size() - t3 - 1);
-            close();
-            return std::make_unique<Date>(start_date, end_date, instructor_login, client_login);
+            result.push_back(Date(start_date, end_date, instructor_login, client_login));
         };
     }
     close();
-    return nullptr;
+    return result;
+}
+
+std::unique_ptr<Date>
+DBScheduleManager::find(std::string instructor_login, std::string client_login, std::string start_time) {
+    return std::unique_ptr<Date>();
 }

@@ -10,7 +10,8 @@
 class ModifyRequest: public Request {
     std::string keyword;
     std::string login;
-    Date date;
+    Date old_date;
+    Date new_date;
 
 public:
     RequestType getType() const {

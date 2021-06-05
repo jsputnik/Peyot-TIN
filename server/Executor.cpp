@@ -2,6 +2,7 @@
 
 #include "Executor.h"
 #include "database/DBManager.h"
+#include "database/DBScheduleManager.h"
 #include <iostream>
 #include <openssl/sha.h>
 
@@ -87,7 +88,7 @@ void Executor::registerUser() {
     DBManager dbManager("../server/database/clients");
     std::unique_ptr<User> user = dbManager.find_user(login);
     if (user != nullptr) {
-        setResponse("241 Register unsuccessful");
+        setResponse("241 Registration unsuccessful");
         return; //user already exists
     }
     unsigned char salt[security_manager.getNotEncodedSaltLength()];
@@ -120,12 +121,13 @@ void Executor::book() {
 void Executor::resign() {
     cout << "In resign()" << endl;
     string login = "testUser";
-    Date date = Date("05.06.2021 19:00");
+//    Date date = Date("05.06.2021 19:00");
     setResponse("240 Login unsuccessful");
 }
 
 void Executor::modify() {
     cout << "In modify()" << endl;
+    DBScheduleManager dbManager("schedule");
     //data = login, old_date, new_date
     //if (Termin = findByStartDateAndLogin == nullptr) return error
     //update(Termin new Termin(data)) -> remove 7 add to schedules

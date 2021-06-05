@@ -4,9 +4,11 @@
 #define PEYOT_UI_H
 #include <string>
 #include "../Client.h"
+#include "../../parser/Parser.h"
 
 
 class UI {
+    Parser parser;
     Client client;
     std::string request;
 public:

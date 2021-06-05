@@ -20,6 +20,7 @@ class Parser {
     int current_index = 0;
     std::string message;
 public:
+    Parser() {}
     Parser(std::string message): message(message) {}
     std::unique_ptr<Request> parse_request();
     std::unique_ptr<QuitRequest> parse_quit_request();
@@ -36,6 +37,15 @@ public:
     std::optional<std::string> parse_password();
     std::optional<std::string> parse_flag(std::string flag); //-mytermins, -instermins etc
     std::optional<std::string> parse_date(); //-mytermins, -instermins etc
+    void init(std::string message);
+
+    const std::string &getMessage() const;
+
+    void setMessage(const std::string &message);
+
+    int getCurrentIndex() const;
+
+    void setCurrentIndex(int currentIndex);
 };
 
 #endif //PEYOT_PARSER_H

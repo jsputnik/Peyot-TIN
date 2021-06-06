@@ -86,3 +86,7 @@ void DBManager::test_print() {
         cout << user.getLogin() << '\t' << user.getHashedPassword() << '\t' << user.getSalt() << endl;
     }
 }
+
+void DBManager::setDbName(const string &dbName) {
+    db_name = dbName;
+}

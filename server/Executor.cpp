@@ -3,6 +3,7 @@
 #include "Executor.h"
 #include "database/DBManager.h"
 #include "database/DBScheduleManager.h"
+#include "eventLog/ELManager.h"
 #include <iostream>
 #include <openssl/sha.h>
 
@@ -126,6 +127,10 @@ void Executor::registerUser() {
 }
 
 void Executor::setResponse(const string &response) {
+    ELManager elManager("../server/eventLog/logs");
+    elManager.save(response + "\n");
+    elManager.close();
+
     Executor::response = response;
 }
 
@@ -207,7 +212,38 @@ void Executor::check_my_termins() {
 
 void Executor::check_termins_by_instructor() {
     cout << "In check_termins_by_instructor()" << endl;
-    setResponse("240 Login unsuccessful");
+
+    DBScheduleManager dbManagerTermins("../server/database/schedule");
+    string check_termins_by_instructor_response;
+    auto termins = dbManagerTermins.find_by_instructor_and_client(request->getLogin(),"-");
+
+    if(termins.empty()){
+        setResponse("226 Check unsuccessful");
+        return;
+    }
+    check_termins_by_instructor_response = "107 Check successful : \n";
+    for(auto termin : termins){
+        check_termins_by_instructor_response += termin.get_start() + " " + termin.get_end() + "\n";
+    }
+
+    setResponse(check_termins_by_instructor_response);
+}
+
+void Executor::check_instructors() {
+    cout << "In check_instructors()" << endl;
+
+    DBManager dbManagerEmployees("../server/database/schedule");
+    string check_instructors_response;
+    auto employees = dbManagerEmployees.find_all();
+    if(employees.empty()){
+        setResponse("227 Check unsuccessful");
+        return;
+    }
+    check_instructors_response = "107 Check successful : ";
+    for(auto employee : employees){
+        check_instructors_response += employee.getLogin() + " ";
+    }
+    setResponse(check_instructors_response);
 }
 
 string Executor::calculate_end_time(string start_time) {

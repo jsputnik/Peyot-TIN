@@ -1,0 +1,12 @@
+//6.06.2021
+
+#ifndef PEYOT_SETSCHEDULEREQUEST_H
+#define PEYOT_SETSCHEDULEREQUEST_H
+
+
+class SetScheduleRequest {
+
+};
+
+
+#endif //PEYOT_SETSCHEDULEREQUEST_H

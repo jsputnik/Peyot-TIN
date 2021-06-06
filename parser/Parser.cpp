@@ -38,6 +38,9 @@ std::unique_ptr<Request> Parser::parse_request() {
     if ((r =  parse_check_termins_by_instructor_request()) != nullptr) {
         return r;
     }
+    if ((r =  parse_setschedule_request()) != nullptr) {
+        return r;
+    }
     return nullptr;
 }
 
@@ -293,6 +296,26 @@ std::unique_ptr<CheckTerminsByInstructorRequest> Parser::parse_check_termins_by_
 
     return make_unique<CheckTerminsByInstructorRequest>(*k, *f, *l);
 }
+
+unique_ptr<SetScheduleRequest> Parser::parse_setschedule_request() {
+    current_index = 0;
+    optional<string> k;
+    if (current_index >= message.size() || (k = parse_keyword("setschedule")) == nullopt) {
+        return nullptr;
+    }
+    if (current_index >= message.size() || message[current_index] != ' ') {
+        return nullptr;
+    }
+    ++current_index;
+
+    optional<string> d;
+    if (current_index >= message.size() || (d = parse_date()) == nullopt) {
+        return nullptr;
+    }
+
+    return make_unique<SetScheduleRequest>(*k, *d);
+}
+
 
 std::unique_ptr<Response> Parser::parse_response() {
     int first;

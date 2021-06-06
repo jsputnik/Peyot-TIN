@@ -52,6 +52,10 @@ void Executor::execute() {
         check_termins_by_instructor();
         return;
     }
+    if (request->getType() == RequestType::SETSCHEDULE) {
+        set_schedule();
+        return;
+    }
     setResponse("UNASSIGNED RESPONSE");
 }
 
@@ -259,6 +263,21 @@ void Executor::check_instructors() {
     }
     setResponse(check_instructors_response);
 }
+
+void Executor::set_schedule() {
+    if (logged_user != LoggedUser::INSTRUCTOR) {
+        setResponse("249 SetSchedule unsuccessful: permission denied");
+        return;
+    }
+    DBScheduleManager dbManager("../server/database/schedule");
+    if (dbManager.find_by_instructor_and_date(current_login, request->getDate()) != nullptr) {
+        setResponse("219 SetSchedule unsuccessful: date already set");
+        return;
+    }
+    dbManager.add_date(Date(request->getDate(), calculate_end_time(request->getDate()), current_login, "-"));
+    setResponse("109 SetSchedule successful");
+}
+
 
 string Executor::calculate_end_time(string start_time) {
     struct tm end_time = {0};

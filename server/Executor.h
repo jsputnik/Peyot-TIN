@@ -32,6 +32,7 @@ public:
     void check_my_termins();
     void check_termins_by_instructor();
     void check_instructors();
+    void set_schedule();
     std::string calculate_end_time(std::string start_time);
 
     void setResponse(const std::string &response);

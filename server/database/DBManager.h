@@ -41,6 +41,8 @@ public:
     std::unique_ptr<User> find_user(std::string login);
     void find_all();
     void test_print();
+
+    void setDbName(const std::string &dbName);
 };
 
 

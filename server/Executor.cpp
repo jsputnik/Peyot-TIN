@@ -63,10 +63,17 @@ void Executor::loginUser() {
     }
     DBManager dbManager("../server/database/clients");
     std::unique_ptr<User> user = dbManager.find_user(login);
+    logged_user = LoggedUser::CLIENT;
     if (user == nullptr) {
-        setResponse("210 Login unsuccessful");
-        return; //user not found
+        dbManager.setDbName("../server/database/employees");
+        if ((user = dbManager.find_user(login)) == nullptr) {
+            setResponse("210 Login unsuccessful");
+            logged_user = LoggedUser::NOONE;
+            return; //user not found
+        }
+        logged_user = LoggedUser::INSTRUCTOR;
     }
+
     string salt_string = user->getSalt();
     string hash_string = user->getHashedPassword();
     unsigned char* salt = reinterpret_cast<unsigned char*>(const_cast<char*>(salt_string.c_str()));
@@ -76,10 +83,10 @@ void Executor::loginUser() {
     string encoded_hash_result_string = reinterpret_cast<char*>(encoded_hash_result);
     if (hash_string == encoded_hash_result_string) {
         current_login = login;
-        logged_user = LoggedUser::CLIENT; //for now
         setResponse("100 Login successful");
         return;
     }
+    logged_user = LoggedUser::NOONE;
     setResponse("240 Login unsuccessful");
     //wrong password
 }
@@ -141,19 +148,18 @@ void Executor::modify() {
     string instructor_login = request->getLogin();
     string old_start_time = request->getOldDate();
     string new_start_time = request->getNewDate();
-    DBScheduleManager dbManager("schedule");
+    DBScheduleManager dbManager("../server/database/schedule");
     unique_ptr<Date> date = dbManager.find(instructor_login, current_login, old_start_time);
     if (date == nullptr) {
         setResponse("214 Date doesn't exist");
         return;
     }
-    //std::string start_date, std::string end_date, std::string instructor_login, std::string client_login
-    string new_end_time = calculate_end_time("19.05.2021 23:30");
+    string new_end_time = calculate_end_time(new_start_time);
     Date new_date = Date(new_start_time, new_end_time, instructor_login, current_login);
-    if (!dbManager.modify_date(instructor_login, current_login, old_start_time, new_date)) {
-        setResponse("314 Couldn't modify");
-        return;
-    }
+//    if (!dbManager.modify_date(instructor_login, current_login, old_start_time, new_date)) {
+//        setResponse("314 Couldn't modify");
+//        return;
+//    }
     setResponse("104 Modification successful");
 }
 

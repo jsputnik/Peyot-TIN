@@ -4,13 +4,12 @@
 #include "database/DBManager.h"
 #include "eventLog/ELManager.h"
 #include "Executor.h"
+#include "database/DBScheduleManager.h"
 
 using namespace std;
 
 int main() {
     std::cout << "Start server" << std::endl;
-//    Executor e(make_unique<Request>());
-//    e.loginUser();
     Server server;
     server.print_server_details();
 //    server.log_server_details();

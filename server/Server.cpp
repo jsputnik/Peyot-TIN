@@ -14,10 +14,12 @@ Server::Server() {
         cerr << "Socket call error" << endl; //error handler
         exit(1);
     }
-    uint8_t myaddr[16] ={0x20, 0x20, 0x20, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
     server.sin6_family = AF_INET6;
+    inet_pton(AF_INET,"0:0:0:0:0:0:0:1", &(server.sin6_addr));
     server.sin6_addr = in6addr_any;
+    //server.sin6_addr = in6addr_any;
+    //server.sin6_addr = in6addr_loopback;
     server.sin6_port = htons(45265);
 
     if (bind(sock, (struct sockaddr *) &server, sizeof server) != 0) {
@@ -42,10 +44,9 @@ void Server::stop() {
 }
 
 void Server::print_server_details() {
-    char buf[140];
-    //inet_pton(AF_INET6,"0000:2222:aaaa:cccc", &(server.sin6_addr));
-    inet_ntop(AF_INET6, &(server.sin6_addr), buf, sizeof(buf));
-    cout<<buf;
+    char buf[128];
+    inet_ntop(AF_INET, &(server.sin6_addr), buf, sizeof(buf));
+    cout<< "Server address: " << buf << endl;
     //cout << "Server IP: " << inet_pton(AF_INET6,(struct in6_addr) server.sin6_addr, buf) << endl;
     cout << "Server port: " << ntohs(server.sin6_port) << endl;
 }

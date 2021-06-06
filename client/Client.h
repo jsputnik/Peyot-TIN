@@ -4,14 +4,23 @@
 #define PEYOT_CLIENT_H
 
 #include <netinet/in.h>
+#include <netdb.h>
 #include "../communication/Sender.h"
 #include "../communication/Receiver.h"
 
 class Client {
+    static const int SERVER_SIZE = 128;
+
     Sender sender;
     Receiver receiver;
     int sock;
-    struct sockaddr_in server;
+    char server[SERVER_SIZE];
+    struct in6_addr serveraddr;
+    struct addrinfo hints;
+    struct addrinfo *res = NULL;
+    int rc;
+
+    //struct sockaddr_in6 server;
 public:
     Client(const char* server_address, const char* server_port);
     void connect_to_server();

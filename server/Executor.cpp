@@ -4,6 +4,7 @@
 #include "database/DBManager.h"
 #include <iostream>
 #include <openssl/sha.h>
+#include "../structures/Date.h"
 
 using namespace std;
 
@@ -123,7 +124,7 @@ void Executor::book() {
 void Executor::resign() {
     cout << "In resign()" << endl;
     string login = "testUser";
-    Date date = Date("05.06.2021 19:00");
+    // Date date("05.06.2021 19:00");
     setResponse("240 Login unsuccessful");
 }
 

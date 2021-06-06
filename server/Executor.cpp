@@ -142,9 +142,23 @@ void Executor::book() {
 
 void Executor::resign() {
     cout << "In resign()" << endl;
-    string login = "testUser";
-//    Date date = Date("05.06.2021 19:00");
-    setResponse("240 Login unsuccessful");
+    if (logged_user != LoggedUser::CLIENT) {
+        setResponse("243 Must log in to resign");
+        return;
+    }
+    string instructor_login = request->getLogin();
+    string resign_date = request->getDate();
+    DBScheduleManager dbManager("../server/database/schedule");
+    unique_ptr<Date> date = dbManager.find(instructor_login, current_login, resign_date);
+    if (date == nullptr) {
+        setResponse("213 Date doesn't exist");
+        return;
+    }
+    if(!dbManager.delete_date(instructor_login, current_login, resign_date)){
+        setResponse("313 Couldn't resign");
+        return;
+    }
+    setResponse("103 Resign successful");
 }
 
 void Executor::modify() {

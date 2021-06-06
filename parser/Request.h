@@ -42,6 +42,13 @@ public:
     virtual void setPassword(const std::string &password) {
         ;
     }
+    virtual const std::string &getDate() const {
+        return "";
+    }
+
+    virtual void setDate(const std::string &Date) {
+        ;
+    }
 
     virtual const std::string &getOldDate() const {
         return "";

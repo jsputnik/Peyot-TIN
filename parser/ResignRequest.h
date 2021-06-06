@@ -42,8 +42,8 @@ public:
         return date;
     }
 
-    void setDate(const std::string &date) {
-        this->date = date;
+    void setDate(const std::string &Date) {
+        date = Date;
     }
 
 };

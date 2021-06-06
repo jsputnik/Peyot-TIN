@@ -190,7 +190,21 @@ void Executor::modify() {
 
 void Executor::check_my_termins() {
     cout << "In check_my_termins()" << endl;
-    setResponse("240 Login unsuccessful");
+
+    DBScheduleManager dbManagerTermins("../server/database/schedule");
+    string check_my_termins;
+    auto termins = dbManagerTermins.find_by_client(current_login);
+
+    if(termins.empty()){
+        setResponse("225 Check unsuccessful");
+        return;
+    }
+    check_my_termins = "105 Check successful : ";
+    for(auto termin : termins){
+        check_my_termins += termin.get_start() + " " + termin.get_end() + " " + termin.get_instructor() + "\n";
+    }
+
+    setResponse(check_my_termins);
 }
 
 void Executor::check_termins_by_instructor() {

@@ -10,7 +10,7 @@ DBManager::DBManager(string db_name) : db_name(db_name) {
 }
 
 void DBManager::open() {
-    pthread_mutex_lock(&clients_mutex); //should use pthread_mutex_timedlock
+    pthread_mutex_lock(&mutex); //should use pthread_mutex_timedlock
 
     db.open(db_name, std::ios::in | std::ios::out | std::ios_base::app); //TODO (?): mode parameter: ios::in for input only, ios::out for output only
     if (!db.good()) {
@@ -33,7 +33,7 @@ void DBManager::open() {
 
 void DBManager::close() {
     db.close();
-    pthread_mutex_unlock(&clients_mutex);
+    pthread_mutex_unlock(&mutex);
 }
 
 std::unique_ptr<User> DBManager::find_user(std::string user_login) {
@@ -58,8 +58,9 @@ std::unique_ptr<User> DBManager::find_user(std::string user_login) {
 }
 
 
-void DBManager::find_all() {
+std::vector<User> DBManager::find_all() {
     open();
+    std::vector<User> users;
     std::string login;
     std::string hashed_password;
     std::string salt;
@@ -70,6 +71,7 @@ void DBManager::find_all() {
         users.push_back(User(login, hashed_password, salt));
     }
     close();
+    return users;
 }
 
 void DBManager::add_user(User newUser) {
@@ -78,13 +80,6 @@ void DBManager::add_user(User newUser) {
     db << '\t' << newUser.getHashedPassword();
     db << '\t' << newUser.getSalt();
     close();
-}
-
-void DBManager::test_print() {
-    cout << "Users:" << endl;
-    for (User user : users) {
-        cout << user.getLogin() << '\t' << user.getHashedPassword() << '\t' << user.getSalt() << endl;
-    }
 }
 
 void DBManager::setDbName(const string &dbName) {

@@ -12,7 +12,6 @@
 class DBScheduleManager {
     std::string db_name;
     std::fstream db;
-    std::vector<Date> dates;
 
     // lock mutex before file open
     // unlock mutex after file close
@@ -30,8 +29,7 @@ public:
     std::vector<Date> find_by_instructor(std::string login);
     std::vector<Date> find_by_instructor_and_client(std::string instructor_login, std::string client_login);
     std::unique_ptr<Date> find(std::string instructor_login, std::string client_login, std::string start_time);
-    void find_all();
-    void test_print();
+    std::vector<Date> find_all();
 };
 
 #endif //PEYOT_DBSCHEDULEMANAGER_H

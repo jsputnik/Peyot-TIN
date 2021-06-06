@@ -3,7 +3,7 @@
 #include "DBScheduleManager.h"
 
 void DBScheduleManager::open() {
-    //pthread_mutex_lock(&clients_mutex); //should use pthread_mutex_timedlock
+    pthread_mutex_lock(&mutex); //should use pthread_mutex_timedlock
 
     db.open(db_name, std::ios::in | std::ios::out | std::ios_base::app); //TODO (?): mode parameter: ios::in for input only, ios::out for output only
     if (!db.good()) {
@@ -27,12 +27,14 @@ void DBScheduleManager::open() {
 
 void DBScheduleManager::close() {
     db.close();
+    pthread_mutex_unlock(&mutex);
 }
 
 void DBScheduleManager::replace_and_close(const char* temp_file) {
     db.close();
     remove(db_name.c_str());
     rename(temp_file, db_name.c_str());
+    pthread_mutex_unlock(&mutex);
 }
 
 DBScheduleManager::DBScheduleManager(std::string db_name) : db_name(std::move(db_name)) {
@@ -86,8 +88,9 @@ bool DBScheduleManager::delete_date(std::string ins_login, std::string cli_login
     return result;
 }
 
-void DBScheduleManager::find_all() {
+std::vector<Date> DBScheduleManager::find_all() {
     open();
+    std::vector<Date> dates;
     std::string line;
     std::string start_date;
     std::string end_date;
@@ -108,14 +111,7 @@ void DBScheduleManager::find_all() {
         dates.push_back(Date(start_date, end_date, instructor_login, client_login));
     }
     close();
-}
-
-void DBScheduleManager::test_print() {
-    std::cout << "Schedule:" << std::endl;
-    for (Date date : dates) {
-        date.print();
-        //std::cout << date.to_string() << std::endl;
-    }
+    return dates;
 }
 
 std::vector<Date> DBScheduleManager::find_by_client(std::string login) {

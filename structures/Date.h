@@ -11,7 +11,6 @@
 class Date {
     struct std::tm start_t;
     struct std::tm end_t;
-
     std::string client_login;
     std::string instructor_login;
 public:
@@ -24,6 +23,12 @@ public:
     static struct std::tm string_to_tm(std::string date);
     void set_client_login(std::string client_login);
     void set_instructor_login(std::string instructor_login);
+
+    std::string get_start();
+    std::string get_end();
+    std::string get_client();
+    std::string get_instructor();
+
     void print();
     std::string to_string();
 };

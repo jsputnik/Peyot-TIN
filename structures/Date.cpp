@@ -93,3 +93,23 @@ std::string Date::to_string() {
     temp << client_login;
     return temp.str();
 }
+
+std::string Date::get_start() {
+    std::stringstream temp;
+    temp << std::put_time(&start_t, "%d.%m.%Y %H:%M");
+    return temp.str();
+}
+
+std::string Date::get_end() {
+    std::stringstream temp;
+    temp << std::put_time(&end_t, "%d.%m.%Y %H:%M");
+    return temp.str();
+}
+
+std::string Date::get_client() {
+    return client_login;
+}
+
+std::string Date::get_instructor() {
+    return instructor_login;
+}

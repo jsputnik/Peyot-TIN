@@ -3,9 +3,12 @@
 #ifndef PEYOT_SETSCHEDULEREQUEST_H
 #define PEYOT_SETSCHEDULEREQUEST_H
 
+#include "Request.h"
 
-class SetScheduleRequest {
 
+class SetScheduleRequest: public Request {
+    std::string keyword;
+    std::string date;
 };
 
 

@@ -294,6 +294,11 @@ std::unique_ptr<CheckTerminsByInstructorRequest> Parser::parse_check_termins_by_
     return make_unique<CheckTerminsByInstructorRequest>(*k, *f, *l);
 }
 
+unique_ptr<SetScheduleRequest> Parser::parse_setschedule_request() {
+
+}
+
+
 std::unique_ptr<Response> Parser::parse_response() {
     int first;
     std::vector<int> first_digit{1,2,3,4};

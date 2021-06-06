@@ -18,7 +18,7 @@ void* ConnectionHandler::handle_connection(void* args) {
     string message;
     Executor executor;
     executor.start_timer();
-    while (message != "quit" || !executor.check_timeout(1800)) {
+    while (message != "quit") {
         message = receiver.receive();
         Parser parser(message);
         executor.setRequest(parser.parse_request());
@@ -28,9 +28,13 @@ void* ConnectionHandler::handle_connection(void* args) {
         if (parser.parse_response() == nullptr) {
             response_message = "321 Incorrect response";
         }
+        if (executor.check_timeout(20)) {
+            response_message = "430 Timed out";
+        }
         Sender sender(sock, response_message.c_str());
         sender.send_msg();
     }
+
     cout << "Connection finished with client with socked id: " << sock << endl;
     close(sock);
 }

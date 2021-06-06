@@ -43,6 +43,22 @@ public:
         ;
     }
 
+    virtual const std::string &getOldDate() const {
+        return "";
+    }
+
+    virtual void setOldDate(const std::string &oldDate) {
+        ;
+    }
+
+    virtual const std::string &getNewDate() const {
+        return "";
+    }
+
+    virtual void setNewDate(const std::string &newDate) {
+        ;
+    }
+
     std::string rtype_to_string();
 };
 

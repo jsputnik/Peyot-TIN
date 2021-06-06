@@ -16,10 +16,11 @@ void* ConnectionHandler::handle_connection(void* args) {
     int sock = *(int*)args;
     Receiver receiver(sock);
     string message;
+    Executor executor;
     while (message != "quit") {
         message = receiver.receive();
         Parser parser(message);
-        Executor executor(parser.parse_request());
+        executor.setRequest(parser.parse_request());
         executor.execute();
         string response_message = executor.getResponse();
         parser.init(response_message);

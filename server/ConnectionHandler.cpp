@@ -17,7 +17,8 @@ void* ConnectionHandler::handle_connection(void* args) {
     Receiver receiver(sock);
     string message;
     Executor executor;
-    while (message != "quit") {
+    executor.start_timer();
+    while (message != "quit" || !executor.check_timeout(1800)) {
         message = receiver.receive();
         Parser parser(message);
         executor.setRequest(parser.parse_request());

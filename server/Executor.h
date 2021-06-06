@@ -11,6 +11,7 @@
 #include "LoggedUser.h"
 #include <string>
 #include <memory>
+#include <chrono>
 
 class Executor {
     SecurityManager security_manager;
@@ -18,6 +19,7 @@ class Executor {
     std::string response;
     LoggedUser logged_user = LoggedUser::NOONE;
     std::string current_login;
+    std::chrono::high_resolution_clock::time_point timer;
 public:
     Executor() = default;
     Executor(std::unique_ptr<Request> request);
@@ -33,6 +35,8 @@ public:
     void check_termins_by_instructor();
     void check_instructors();
     void set_schedule();
+    void start_timer();
+    bool check_timeout(int seconds);
     std::string calculate_end_time(std::string start_time);
 
     void setResponse(const std::string &response);

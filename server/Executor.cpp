@@ -307,3 +307,14 @@ const unique_ptr<Request> &Executor::getRequest() const {
 void Executor::setRequest(unique_ptr<Request> request) {
     this->request = std::move(request);
 }
+
+void Executor::start_timer() {
+    timer = std::chrono::high_resolution_clock::now();
+}
+
+bool Executor::check_timeout(int seconds) {
+    auto stop = std::chrono::high_resolution_clock::now();
+    if(std::chrono::duration_cast<std::chrono::seconds>(stop-timer).count() >= seconds)
+        return true;
+    return false;
+}

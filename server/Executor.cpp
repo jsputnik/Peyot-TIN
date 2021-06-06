@@ -235,7 +235,7 @@ void Executor::check_termins_by_instructor() {
         setResponse("226 Check unsuccessful");
         return;
     }
-    check_termins_by_instructor_response = "107 Check successful : \n";
+    check_termins_by_instructor_response = "106 Check successful : \n";
     for(auto termin : termins){
         check_termins_by_instructor_response += termin.get_start() + " " + termin.get_end() + "\n";
     }

@@ -28,7 +28,7 @@ void* ConnectionHandler::handle_connection(void* args) {
         if (parser.parse_response() == nullptr) {
             response_message = "321 Incorrect response";
         }
-        if (executor.check_timeout(20)) {
+        if (executor.check_timeout(600)) {
             response_message = "430 Timed out";
         }
         Sender sender(sock, response_message.c_str());

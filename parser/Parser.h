@@ -14,6 +14,7 @@
 #include "CheckTerminsByInstructorRequest.h"
 #include "Response.h"
 #include "SetScheduleRequest.h"
+#include "CheckInstructorsRequest.h"
 #include <optional>
 #include <memory>
 
@@ -30,6 +31,7 @@ public:
     std::unique_ptr<BookRequest> parse_book_request();
     std::unique_ptr<ResignRequest> parse_resign_request();
     std::unique_ptr<ModifyRequest> parse_modify_request();
+    std::unique_ptr<CheckInstructorsRequest> parse_check_instructors_request();
     std::unique_ptr<CheckMyTerminsRequest> parse_check_my_termins_request();
     std::unique_ptr<CheckTerminsByInstructorRequest> parse_check_termins_by_instructor_request();
     std::unique_ptr<SetScheduleRequest> parse_setschedule_request();

@@ -22,6 +22,30 @@ public:
     RequestType getType() const {
         return type;
     }
+
+    const std::string &getLogin() const {
+        return login;
+    }
+
+    void setLogin(const std::string &login) {
+        ModifyRequest::login = login;
+    }
+
+    const std::string &getOldDate() const {
+        return old_date;
+    }
+
+    void setOldDate(const std::string &oldDate) {
+        old_date = oldDate;
+    }
+
+    const std::string &getNewDate() const {
+        return new_date;
+    }
+
+    void setNewDate(const std::string &newDate) {
+        new_date = newDate;
+    }
 };
 
 

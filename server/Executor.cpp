@@ -19,6 +19,7 @@ void Executor::execute() {
         return;
     }
     if (request->getType() == RequestType::QUIT) {
+        logged_user = LoggedUser::NOONE;
         setResponse("400 Logged out");
         return;
     }
@@ -50,20 +51,20 @@ void Executor::execute() {
         check_termins_by_instructor();
         return;
     }
-
-    //if request == login -> loginUser
-    //if request == register -> registerUser
-    //...
     setResponse("UNASSIGNED RESPONSE");
 }
 
 void Executor::loginUser() {
     string login = request->getLogin();
     string password = request->getPassword();
+    if (logged_user != LoggedUser::NOONE) {
+        setResponse("240 Already logged in as: " + current_login);
+        return;
+    }
     DBManager dbManager("../server/database/clients");
     std::unique_ptr<User> user = dbManager.find_user(login);
     if (user == nullptr) {
-        setResponse("240 Login unsuccessful");
+        setResponse("210 Login unsuccessful");
         return; //user not found
     }
     string salt_string = user->getSalt();
@@ -74,6 +75,8 @@ void Executor::loginUser() {
     security_manager.hash_password(SecurityManager::merge_salt_with_password(salt, security_manager.getEncodedSaltLength(), password), hash_result, encoded_hash_result, SHA512_DIGEST_LENGTH);
     string encoded_hash_result_string = reinterpret_cast<char*>(encoded_hash_result);
     if (hash_string == encoded_hash_result_string) {
+        current_login = login;
+        logged_user = LoggedUser::CLIENT; //for now
         setResponse("100 Login successful");
         return;
     }
@@ -85,10 +88,14 @@ void Executor::registerUser() {
     cout << "In register()" << endl;
     string login = request->getLogin();
     string password = request->getPassword();
+    if (logged_user != LoggedUser::NOONE) {
+        setResponse("241 Can't register while logged in as: " + current_login);
+        return;
+    }
     DBManager dbManager("../server/database/clients");
     std::unique_ptr<User> user = dbManager.find_user(login);
     if (user != nullptr) {
-        setResponse("241 Registration unsuccessful");
+        setResponse("211 Registration unsuccessful");
         return; //user already exists
     }
     unsigned char salt[security_manager.getNotEncodedSaltLength()];
@@ -127,11 +134,24 @@ void Executor::resign() {
 
 void Executor::modify() {
     cout << "In modify()" << endl;
+    if (logged_user != LoggedUser::CLIENT) {
+        setResponse("244 Must log in to modify");
+        return;
+    }
+    string instructor_login = request->getLogin();
+    string old_start_time = request->getOldDate();
+    string new_start_time = request->getNewDate();
     DBScheduleManager dbManager("schedule");
-    //data = login, old_date, new_date
-    //if (Termin = findByStartDateAndLogin == nullptr) return error
-    //update(Termin new Termin(data)) -> remove 7 add to schedules
-    //add
+    unique_ptr<Date> new_date = dbManager.find(instructor_login, current_login, old_start_time);
+    if (new_date == nullptr) {
+        setResponse("214 Date doesn't exist");
+//        dbManager.close();
+        return;
+    }
+    if (!dbManager.modify_date(instructor_login, current_login, old_start_time, *new_date)) {
+        setResponse("314 Couldn't modify");
+        return;
+    }
     setResponse("104 Modification successful");
 }
 
@@ -143,4 +163,20 @@ void Executor::check_my_termins() {
 void Executor::check_termins_by_instructor() {
     cout << "In check_termins_by_instructor()" << endl;
     setResponse("240 Login unsuccessful");
+}
+
+const string &Executor::getCurrentLogin() const {
+    return current_login;
+}
+
+void Executor::setCurrentLogin(const string &currentLogin) {
+    current_login = currentLogin;
+}
+
+const unique_ptr<Request> &Executor::getRequest() const {
+    return request;
+}
+
+void Executor::setRequest(unique_ptr<Request> request) {
+    this->request = std::move(request);
 }

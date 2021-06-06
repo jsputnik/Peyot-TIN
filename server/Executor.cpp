@@ -103,7 +103,15 @@ void Executor::registerUser() {
     std::unique_ptr<User> user = dbManager.find_user(login);
     if (user != nullptr) {
         setResponse("211 Registration unsuccessful");
-        return; //user already exists
+        return; //user already exists in clients
+    }
+    dbManager.setDbName("../server/database/employees");
+    if ((user = dbManager.find_user(login)) != nullptr) {
+        setResponse("211 Registration unsuccessful");
+        return; //user already exists in employees
+    }
+    if (request->getFlag() == "c") {
+        dbManager.setDbName("../server/database/clients");
     }
     unsigned char salt[security_manager.getNotEncodedSaltLength()];
     unsigned char encoded_salt[security_manager.getEncodedSaltLength()];

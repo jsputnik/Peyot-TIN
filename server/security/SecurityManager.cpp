@@ -27,7 +27,6 @@ void SecurityManager::generate_salt(unsigned char encoded_salt[], unsigned char 
 const char* SecurityManager::merge_salt_with_password(unsigned char* salt, int salt_length, string passwd) {
     string salt_string = reinterpret_cast<char*>(salt);
     passwd += salt_string;
-    cout << "Merged passwd and salt: " << passwd << endl;
     return passwd.c_str();
 }
 

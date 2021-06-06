@@ -9,11 +9,12 @@
 
 class RegisterRequest: public Request {
     std::string keyword;
+    std::string flag;
     std::string login;
     std::string password;
 
 public:
-    RegisterRequest(std::string keyword, std::string login, std::string password): keyword(keyword), login(login), password(password) {
+    RegisterRequest(std::string keyword, std::string flag, std::string login, std::string password): keyword(keyword), flag(flag), login(login), password(password) {
         type = RequestType::REGISTER;
     }
 
@@ -27,6 +28,14 @@ public:
 
     void setKeyword(const std::string &keyword) {
         RegisterRequest::keyword = keyword;
+    }
+
+    const std::string &getFlag() const {
+        return flag;
+    }
+
+    void setFlag(const std::string &flag) {
+        RegisterRequest::flag = flag;
     }
 
     const std::string &getLogin() const {

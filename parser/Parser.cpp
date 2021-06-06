@@ -60,6 +60,21 @@ unique_ptr<RegisterRequest> Parser::parse_register_request() {
         return nullptr;
     }
     ++current_index;
+    optional<string> f;
+    int saved_index = current_index;
+    if (current_index >= message.size()) {
+        return nullptr;
+    }
+    if ((f = parse_flag("c")) == nullopt) {
+        current_index = saved_index;
+        if ((f = parse_flag("i")) == nullopt) {
+            return nullptr;
+        }
+    }
+    if (current_index >= message.size() || message[current_index] != ' ') {
+        return nullptr;
+    }
+    ++current_index;
     optional<string> l;
     if (current_index >= message.size() || (l = parse_login()) == nullopt) {
         return nullptr;
@@ -72,7 +87,7 @@ unique_ptr<RegisterRequest> Parser::parse_register_request() {
     if (current_index >= message.size() || (p = parse_password()) == nullopt) {
         return nullptr;
     }
-    return make_unique<RegisterRequest>(*k, *l, *p);
+    return make_unique<RegisterRequest>(*k, *f, *l, *p);
 }
 
 

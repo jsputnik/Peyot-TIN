@@ -12,7 +12,7 @@ int main() {
     std::cout << "Start server" << std::endl;
     Server server;
     server.print_server_details();
-//    server.log_server_details();
+    server.log_server_details();
     server.start();
     server.stop();
     return 0;

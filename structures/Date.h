@@ -21,7 +21,7 @@ public:
     Date(std::string start_date);
     void set_start(std::string date);
     void set_end(std::string date);
-    struct std::tm string_to_tm(std::string date);
+    static struct std::tm string_to_tm(std::string date);
     void set_client_login(std::string client_login);
     void set_instructor_login(std::string instructor_login);
     void print();

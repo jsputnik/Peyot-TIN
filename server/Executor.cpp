@@ -142,13 +142,15 @@ void Executor::modify() {
     string old_start_time = request->getOldDate();
     string new_start_time = request->getNewDate();
     DBScheduleManager dbManager("schedule");
-    unique_ptr<Date> new_date = dbManager.find(instructor_login, current_login, old_start_time);
-    if (new_date == nullptr) {
+    unique_ptr<Date> date = dbManager.find(instructor_login, current_login, old_start_time);
+    if (date == nullptr) {
         setResponse("214 Date doesn't exist");
-//        dbManager.close();
         return;
     }
-    if (!dbManager.modify_date(instructor_login, current_login, old_start_time, *new_date)) {
+    //std::string start_date, std::string end_date, std::string instructor_login, std::string client_login
+    string new_end_time = calculate_end_time("19.05.2021 23:30");
+    Date new_date = Date(new_start_time, new_end_time, instructor_login, current_login);
+    if (!dbManager.modify_date(instructor_login, current_login, old_start_time, new_date)) {
         setResponse("314 Couldn't modify");
         return;
     }
@@ -164,6 +166,19 @@ void Executor::check_termins_by_instructor() {
     cout << "In check_termins_by_instructor()" << endl;
     setResponse("240 Login unsuccessful");
 }
+
+string Executor::calculate_end_time(string start_time) {
+    struct tm end_time = {0};
+    end_time.tm_isdst = -1;
+    strptime(start_time.c_str(), "%d.%m.%Y %H:%M", &end_time);
+    time_t now = mktime(&end_time);
+    now += (60*60 * 1.5);
+    end_time = *localtime(&now);
+    stringstream ss;
+    ss << put_time(&end_time, "%d.%m.%Y %H:%M");
+    return ss.str();
+}
+
 
 const string &Executor::getCurrentLogin() const {
     return current_login;

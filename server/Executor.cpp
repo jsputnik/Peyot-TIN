@@ -156,10 +156,10 @@ void Executor::modify() {
     }
     string new_end_time = calculate_end_time(new_start_time);
     Date new_date = Date(new_start_time, new_end_time, instructor_login, current_login);
-//    if (!dbManager.modify_date(instructor_login, current_login, old_start_time, new_date)) {
-//        setResponse("314 Couldn't modify");
-//        return;
-//    }
+    if (!dbManager.modify_date(instructor_login, current_login, old_start_time, new_date)) {
+        setResponse("314 Couldn't modify");
+        return;
+    }
     setResponse("104 Modification successful");
 }
 

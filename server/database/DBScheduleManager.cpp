@@ -218,6 +218,7 @@ std::unique_ptr<Date> DBScheduleManager::find(std::string ins_login, std::string
         start_date = line.substr(0, t1);
         if (instructor_login == ins_login && client_login == cli_login && start_date == start_time) {
             end_date = line.substr(t1 + 1, t2 - t1 - 1);
+            close();
             return std::make_unique<Date>(start_date, end_date, instructor_login, client_login);
         };
     }

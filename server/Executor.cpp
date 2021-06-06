@@ -135,7 +135,24 @@ const string &Executor::getResponse() const {
 
 void Executor::book() {
     cout << "In book()" << endl;
-    setResponse("240 Login unsuccessful");
+    if (logged_user != LoggedUser::CLIENT) {
+        setResponse("222 Must log in to book in");
+        return;
+    }
+    string instructor_login = request->getLogin();
+    string start_time = request->getDate();
+    DBScheduleManager dbManager("../server/database/schedule");
+    unique_ptr<Date> date = dbManager.find(instructor_login, "-", start_time);
+    if (date == nullptr) {
+        setResponse("222 Date doesn't exist or is already booked");
+        return;
+    }
+    Date new_date(start_time, date->get_end(), instructor_login, current_login);
+    if (!dbManager.modify_date(instructor_login, "-", start_time, new_date)) {
+        setResponse("212 Couldn't book in");
+        return;
+    }
+    setResponse("102 Reservation successful");
 }
 
 void Executor::resign() {

@@ -39,6 +39,14 @@ public:
         BookRequest::login = login;
     }
 
+    const std::string &getDate() const {
+        return date;
+    }
+
+    void setDate(const std::string &ate) {
+        BookRequest::date = date;
+    }
+
 };
 
 

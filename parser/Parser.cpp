@@ -35,10 +35,13 @@ std::unique_ptr<Request> Parser::parse_request() {
     if ((r = parse_check_my_termins_request()) != nullptr) {
         return r;
     }
-    if ((r =  parse_check_termins_by_instructor_request()) != nullptr) {
+    if ((r = parse_check_termins_by_instructor_request()) != nullptr) {
         return r;
     }
-    if ((r =  parse_setschedule_request()) != nullptr) {
+    if ((r = parse_check_instructors_request()) != nullptr) {
+        return r;
+    }
+    if ((r = parse_setschedule_request()) != nullptr) {
         return r;
     }
     return nullptr;
@@ -266,7 +269,6 @@ std::unique_ptr<CheckMyTerminsRequest> Parser::parse_check_my_termins_request() 
     if (current_index >= message.size() || (f = parse_flag("mytermins")) == nullopt) {
         return nullptr;
     }
-
     return make_unique<CheckMyTerminsRequest>(*k, *f);
 }
 
@@ -296,6 +298,24 @@ std::unique_ptr<CheckTerminsByInstructorRequest> Parser::parse_check_termins_by_
 
     return make_unique<CheckTerminsByInstructorRequest>(*k, *f, *l);
 }
+
+unique_ptr<CheckInstructorsRequest> Parser::parse_check_instructors_request() {
+    current_index = 0;
+    optional<string> k;
+    if (current_index >= message.size() || (k = parse_keyword("check")) == nullopt) {
+        return nullptr;
+    }
+    if (current_index >= message.size() || message[current_index] != ' ') {
+        return nullptr;
+    }
+    ++current_index;
+    optional<string> f;
+    if (current_index >= message.size() || (f = parse_flag("instructors")) == nullopt) {
+        return nullptr;
+    }
+    return make_unique<CheckInstructorsRequest>(*k, *f);
+}
+
 
 unique_ptr<SetScheduleRequest> Parser::parse_setschedule_request() {
     current_index = 0;

@@ -52,11 +52,15 @@ void Executor::execute() {
         check_termins_by_instructor();
         return;
     }
+    if (request->getType() == RequestType::CHECKINSTRUCTORS) {
+        check_instructors();
+        return;
+    }
     if (request->getType() == RequestType::SETSCHEDULE) {
         set_schedule();
         return;
     }
-    setResponse("UNASSIGNED RESPONSE");
+    setResponse("350 Internal error: parsed undefined message");
 }
 
 void Executor::loginUser() {
@@ -96,7 +100,6 @@ void Executor::loginUser() {
 }
 
 void Executor::registerUser() {
-    cout << "In register()" << endl;
     string login = request->getLogin();
     string password = request->getPassword();
     if (logged_user != LoggedUser::NOONE) {
@@ -143,7 +146,6 @@ const string &Executor::getResponse() const {
 }
 
 void Executor::book() {
-    cout << "In book()" << endl;
     if (logged_user != LoggedUser::CLIENT) {
         setResponse("222 Must log in to book in");
         return;
@@ -165,7 +167,6 @@ void Executor::book() {
 }
 
 void Executor::resign() {
-    cout << "In resign()" << endl;
     if (logged_user != LoggedUser::CLIENT) {
         setResponse("243 Must log in to resign");
         return;
@@ -186,7 +187,6 @@ void Executor::resign() {
 }
 
 void Executor::modify() {
-    cout << "In modify()" << endl;
     if (logged_user != LoggedUser::CLIENT) {
         setResponse("244 Must log in to modify");
         return;
@@ -210,8 +210,6 @@ void Executor::modify() {
 }
 
 void Executor::check_my_termins() {
-    cout << "In check_my_termins()" << endl;
-
     DBScheduleManager dbManagerTermins("../server/database/schedule");
     string check_my_termins;
     auto termins = dbManagerTermins.find_by_client(current_login);
@@ -229,8 +227,6 @@ void Executor::check_my_termins() {
 }
 
 void Executor::check_termins_by_instructor() {
-    cout << "In check_termins_by_instructor()" << endl;
-
     DBScheduleManager dbManagerTermins("../server/database/schedule");
     string check_termins_by_instructor_response;
     auto termins = dbManagerTermins.find_by_instructor_and_client(request->getLogin(),"-");
@@ -248,9 +244,7 @@ void Executor::check_termins_by_instructor() {
 }
 
 void Executor::check_instructors() {
-    cout << "In check_instructors()" << endl;
-
-    DBManager dbManagerEmployees("../server/database/schedule");
+    DBManager dbManagerEmployees("../server/database/employees");
     string check_instructors_response;
     auto employees = dbManagerEmployees.find_all();
     if(employees.empty()){
@@ -283,9 +277,9 @@ string Executor::calculate_end_time(string start_time) {
     struct tm end_time = {0};
     end_time.tm_isdst = -1;
     strptime(start_time.c_str(), "%d.%m.%Y %H:%M", &end_time);
-    time_t now = mktime(&end_time);
-    now += (60*60 * 1.5);
-    end_time = *localtime(&now);
+    time_t converted_end_time = mktime(&end_time);
+    converted_end_time += (60*60 * 1.5);
+    end_time = *localtime(&converted_end_time);
     stringstream ss;
     ss << put_time(&end_time, "%d.%m.%Y %H:%M");
     return ss.str();

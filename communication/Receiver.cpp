@@ -21,8 +21,6 @@ string Receiver::receive() {
         cerr << "Accept call error, bytes received: " << bytes_rcvd << endl;
         exit(5);
     }
-    cout << "Bytes received: " << bytes_rcvd << endl;
-    cout << "Message received: " << buf << endl;
     string msg = buf;
     memset(buf, 0, sizeof buf); //clear buffer
     return msg;

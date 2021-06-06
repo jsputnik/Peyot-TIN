@@ -59,6 +59,14 @@ public:
         ;
     }
 
+    virtual const std::string &getFlag() const {
+        return "";
+    }
+
+    virtual void setFlag(const std::string &flag) {
+        ;
+    }
+
     std::string rtype_to_string();
 };
 

@@ -29,6 +29,7 @@ public:
     std::vector<Date> find_by_instructor(std::string login);
     std::vector<Date> find_by_instructor_and_client(std::string instructor_login, std::string client_login);
     std::unique_ptr<Date> find(std::string instructor_login, std::string client_login, std::string start_time);
+    std::unique_ptr<Date> find_by_instructor_and_date(std::string instructor_login, std::string start_time);
     std::vector<Date> find_all();
 };
 

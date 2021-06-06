@@ -58,7 +58,7 @@ void Executor::loginUser() {
     string login = request->getLogin();
     string password = request->getPassword();
     if (logged_user != LoggedUser::NOONE) {
-        setResponse("240 Already logged in as: " + current_login);
+        setResponse("240 Login unsuccessful: already logged in as: " + current_login);
         return;
     }
     DBManager dbManager("../server/database/clients");
@@ -67,9 +67,9 @@ void Executor::loginUser() {
     if (user == nullptr) {
         dbManager.setDbName("../server/database/employees");
         if ((user = dbManager.find_user(login)) == nullptr) {
-            setResponse("210 Login unsuccessful");
+            setResponse("210 Login unsuccessful: user doesn't exist");
             logged_user = LoggedUser::NOONE;
-            return; //user not found
+            return;
         }
         logged_user = LoggedUser::INSTRUCTOR;
     }
@@ -87,8 +87,7 @@ void Executor::loginUser() {
         return;
     }
     logged_user = LoggedUser::NOONE;
-    setResponse("240 Login unsuccessful");
-    //wrong password
+    setResponse("240 Login unsuccessful: wrong password");
 }
 
 void Executor::registerUser() {
@@ -96,19 +95,19 @@ void Executor::registerUser() {
     string login = request->getLogin();
     string password = request->getPassword();
     if (logged_user != LoggedUser::NOONE) {
-        setResponse("241 Can't register while logged in as: " + current_login);
+        setResponse("241 Registration unsuccessful: can't register while logged in as: " + current_login);
         return;
     }
     DBManager dbManager("../server/database/clients");
     std::unique_ptr<User> user = dbManager.find_user(login);
     if (user != nullptr) {
-        setResponse("211 Registration unsuccessful");
-        return; //user already exists in clients
+        setResponse("211 Registration unsuccessful: user already registered");
+        return;
     }
     dbManager.setDbName("../server/database/employees");
     if ((user = dbManager.find_user(login)) != nullptr) {
-        setResponse("211 Registration unsuccessful");
-        return; //user already exists in employees
+        setResponse("211 Registration unsuccessful: instructor already registered");
+        return;
     }
     if (request->getFlag() == "c") {
         dbManager.setDbName("../server/database/clients");
@@ -120,7 +119,6 @@ void Executor::registerUser() {
     unsigned char encoded_hash[4*(SHA512_DIGEST_LENGTH+2)/3];
     security_manager.hash_password(SecurityManager::merge_salt_with_password(encoded_salt, security_manager.getEncodedSaltLength(), password), hash, encoded_hash, SHA512_DIGEST_LENGTH);
 
-    //cast unsigned char to char
     string hash_string = reinterpret_cast<char*>(encoded_hash);
     string salt_string = reinterpret_cast<char*>(encoded_salt);
     dbManager.add_user(User(login, hash_string, salt_string));
@@ -173,13 +171,13 @@ void Executor::modify() {
     DBScheduleManager dbManager("../server/database/schedule");
     unique_ptr<Date> date = dbManager.find(instructor_login, current_login, old_start_time);
     if (date == nullptr) {
-        setResponse("214 Date doesn't exist");
+        setResponse("214 Modification unsuccessful: date doesn't exist");
         return;
     }
     string new_end_time = calculate_end_time(new_start_time);
     Date new_date = Date(new_start_time, new_end_time, instructor_login, current_login);
     if (!dbManager.modify_date(instructor_login, current_login, old_start_time, new_date)) {
-        setResponse("314 Couldn't modify");
+        setResponse("314 Modification unsuccessful: Couldn't modify");
         return;
     }
     setResponse("104 Modification successful");

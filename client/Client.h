@@ -19,7 +19,6 @@ public:
     std::string receive();
     void stop(int status_code);
     void print_server_details();
-    bool isResponseValid(std::string response); //handled in receiver/sender/other class
 };
 
 

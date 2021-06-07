@@ -13,16 +13,11 @@ int main() {
     client.print_server_details(); //server IP address and port client is connecting to
     client.connect_to_server();
     UI ui(client);
-    long maxAttempts = 10;
     long attempt = 0;
     ui.get_request();
     while (ui.help() || (ui.handle_request())) {
         ++attempt;
         cout << "Attempt: " << attempt << endl;
-        if (attempt > maxAttempts) {
-            client.stop(1); //disconnect
-            return 1;
-        }
         ui.get_request();
     }
     client.stop(0);

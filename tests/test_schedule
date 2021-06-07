@@ -1,0 +1,11 @@
+<SCHEDULE DATABASE>
+<start_time-end_time-instructor_login-client_login>
+14.05.2021 16:15	14.05.2021 17:45	instruktor1	klient1
+15.05.2021 16:15	15.05.2021 17:45	instruktor2	klient2
+16.05.2021 16:15	16.05.2021 17:45	instruktor3	klient3
+17.05.2021 16:15	17.05.2021 17:45	instruktor4	klient4
+18.05.2021 16:15	18.05.2021 17:45	instruktor1	klient4
+19.05.2021 16:15	19.05.2021 17:45	instruktor2	klient3
+20.05.2021 16:15	20.05.2021 17:45	instruktor3	klient2
+21.05.2021 16:15	21.05.2021 17:45	instruktor4	klient1
+22.05.2021 16:15	22.05.2021 17:45	instruktor1	klient4

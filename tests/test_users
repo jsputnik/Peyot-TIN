@@ -1,0 +1,5 @@
+<CLIENTS DATABASE>
+<login-hashed_passwd-salt>
+login1	hash1	salt1
+login2	hash2	salt2
+login3	hash3	salt3

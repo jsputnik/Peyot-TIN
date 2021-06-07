@@ -1,5 +1,5 @@
 <CLIENTS DATABASE>
 <login-hashed_passwd-salt>
-mkwerc	uUUY7bsF43SPoMTNlE1iR5VjKF+NRRtctVXkv2X6oy+3SePviwJUJxa/FFhLciaviGt7JMDsjYgH6GcQpQzyAQ==	a3EtfdZ5Nc39m5IWxXQY/A==
-bderk	7WnuPB8oBy5aKaTLOhO+rzV9QQZhf6WImNyOBkXctfvaG4vEMKB6XmHQM9FkCXZ0vjM7XKM3Pld7pVHqrjIRKg==	eFsH/eJ5WuBkURz1KA7+rA==
-vdiesel	oRM4B9qfgNLVTe4s96G28nJyOl8+P4XxlEEyJ+B80KrPBTSaG8yOEJPFQ00n6RQWKXd4orIIF1elBA1T/j0eTQ==	dq4ZIKb0tuJ/T49dJmaAZg==
+login1	hash1	salt1
+login2	hash2	salt2
+login3	hash3	salt3

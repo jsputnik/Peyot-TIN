@@ -147,7 +147,7 @@ const string &Executor::getResponse() const {
 
 void Executor::book() {
     if (logged_user != LoggedUser::CLIENT) {
-        setResponse("222 Must log in to book in");
+        setResponse("222 Reservation unsuccessful: must log in to book in");
         return;
     }
     string instructor_login = request->getLogin();
@@ -155,40 +155,54 @@ void Executor::book() {
     DBScheduleManager dbManager("../server/database/schedule");
     unique_ptr<Date> date = dbManager.find(instructor_login, "-", start_time);
     if (date == nullptr) {
-        setResponse("222 Date doesn't exist or is already booked");
+        setResponse("222 Reservation unsuccessful: date doesn't exist or is already booked");
         return;
     }
     Date new_date(start_time, date->get_end(), instructor_login, current_login);
     if (!dbManager.modify_date(instructor_login, "-", start_time, new_date)) {
-        setResponse("212 Couldn't book in");
+        setResponse("212 Reservation unsuccessful: couldn't book in");
         return;
     }
     setResponse("102 Reservation successful");
 }
 
 void Executor::resign() {
-    if (logged_user != LoggedUser::CLIENT) {
-        setResponse("243 Must log in to resign");
+    if (logged_user != LoggedUser::CLIENT && logged_user != LoggedUser::INSTRUCTOR) {
+        setResponse("243 Resign unsuccessful: must log in to resign");
         return;
     }
-    string instructor_login = request->getLogin();
+    string login = request->getLogin();
     string resign_date = request->getDate();
     DBScheduleManager dbManager("../server/database/schedule");
-    unique_ptr<Date> date = dbManager.find(instructor_login, current_login, resign_date);
+    unique_ptr<Date> date;
+    if (logged_user == LoggedUser::CLIENT) {
+        date = dbManager.find(login, current_login, resign_date);
+    }
+    else {
+        date = dbManager.find(current_login, login, resign_date);
+    }
     if (date == nullptr) {
-        setResponse("213 Date doesn't exist");
+        setResponse("213 Resign unsuccessful: date doesn't exist");
         return;
     }
-    if(!dbManager.delete_date(instructor_login, current_login, resign_date)){
-        setResponse("313 Couldn't resign");
-        return;
+    if (logged_user == LoggedUser::CLIENT) {
+        if(!dbManager.delete_date(login, current_login, resign_date)){
+            setResponse("313 Resign unsuccessful: couldn't resign");
+            return;
+        }
+    }
+    else {
+        if(!dbManager.delete_date(current_login, login, resign_date)){
+            setResponse("313 Resign unsuccessful: couldn't resign");
+            return;
+        }
     }
     setResponse("103 Resign successful");
 }
 
 void Executor::modify() {
     if (logged_user != LoggedUser::CLIENT) {
-        setResponse("244 Must log in to modify");
+        setResponse("244 Modification unsuccessful: must log in to modify");
         return;
     }
     string instructor_login = request->getLogin();

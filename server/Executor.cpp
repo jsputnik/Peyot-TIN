@@ -149,7 +149,7 @@ const string &Executor::getResponse() const {
 
 void Executor::book() {
     if (logged_user != LoggedUser::CLIENT) {
-        setResponse("222 Reservation unsuccessful: must log in to book in");
+        setResponse("242 Reservation unsuccessful: must log in to book in");
         return;
     }
     string instructor_login = request->getLogin();

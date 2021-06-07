@@ -65,6 +65,17 @@ Mon Jun  7 00:01:24 2021
 220 Couldn't parse request
 Mon Jun  7 00:01:24 2021
 220 Couldn't parse request
+Mon Jun  7 00:33:03 2021
+Server IP: 127.0.0.1
+Mon Jun  7 00:33:47 2021
+100 Login successful
+Mon Jun  7 00:34:33 2021
+105 Check successful : 01.07.2021 18:15 01.07.2021 20:45 lpork
+
+Mon Jun  7 00:34:58 2021
+220 Couldn't parse request
+Mon Jun  7 00:34:58 2021
+220 Couldn't parse request
 Sun Jun  6 15:19:04 2021
 Server IP: 127.0.0.1
 Sun Jun  6 15:19:15 2021
@@ -343,3 +354,18 @@ Mon Jun  7 04:08:54 2021
 100 Login successful
 Mon Jun  7 04:08:59 2021
 400 Logged out
+Mon Jun  7 15:38:10 2021
+Server IP: 127.0.0.1
+Mon Jun  7 15:40:55 2021
+245 Check unsuccessful: must log in to check
+Mon Jun  7 15:41:08 2021
+100 Login successful
+Mon Jun  7 15:41:24 2021
+105 Check successful : 01.07.2021 18:15 01.07.2021 20:45 lpork
+
+Mon Jun  7 15:42:36 2021
+220 Couldn't parse request
+Mon Jun  7 15:42:36 2021
+220 Couldn't parse request
+Mon Jun  7 15:42:42 2021
+Server IP: 127.0.0.1

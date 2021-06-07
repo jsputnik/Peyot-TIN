@@ -226,17 +226,34 @@ void Executor::modify() {
 }
 
 void Executor::check_my_termins() {
+    if (logged_user != LoggedUser::CLIENT && logged_user != LoggedUser::INSTRUCTOR) {
+        setResponse("245 Check unsuccessful: must log in to check");
+        return;
+    }
+
     DBScheduleManager dbManagerTermins("../server/database/schedule");
     string check_my_termins;
-    auto termins = dbManagerTermins.find_by_client(current_login);
+    auto termins = dbManagerTermins.find_by_instructor(current_login);
+    if (logged_user == LoggedUser::CLIENT) {
+        termins = dbManagerTermins.find_by_client(current_login);
+    }
 
-    if(termins.empty()){
-        setResponse("225 Check unsuccessful");
+
+    if (termins.empty()) {
+        setResponse("105 Check successful : nothing found");
         return;
     }
     check_my_termins = "105 Check successful : ";
-    for(auto termin : termins){
-        check_my_termins += termin.get_start() + " " + termin.get_end() + " " + termin.get_instructor() + "\n";
+
+    if (logged_user == LoggedUser::CLIENT) {
+        for (auto termin : termins) {
+            check_my_termins += termin.get_start() + " " + termin.get_end() + " " + termin.get_instructor() + "\n";
+        }
+    }
+    else{
+        for (auto termin : termins) {
+            check_my_termins += termin.get_start() + " " + termin.get_end() + " " + termin.get_client() + "\n";
+        }
     }
 
     setResponse(check_my_termins);
@@ -248,7 +265,7 @@ void Executor::check_termins_by_instructor() {
     auto termins = dbManagerTermins.find_by_instructor_and_client(request->getLogin(),"-");
 
     if(termins.empty()){
-        setResponse("226 Check unsuccessful");
+        setResponse("106 Check successful : nothing found");
         return;
     }
     check_termins_by_instructor_response = "106 Check successful : \n";
@@ -264,7 +281,7 @@ void Executor::check_instructors() {
     string check_instructors_response;
     auto employees = dbManagerEmployees.find_all();
     if(employees.empty()){
-        setResponse("227 Check unsuccessful");
+        setResponse("107 Check successful : nothing found");
         return;
     }
     check_instructors_response = "107 Check successful : ";

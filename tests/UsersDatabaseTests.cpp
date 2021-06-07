@@ -10,7 +10,7 @@
 using namespace std;
 
 TEST_CASE("Find user", "[Users database]") {
-    DBManager dbManager("../tests/clients");
+    DBManager dbManager("../tests/test_users");
     SECTION("First user") {
         auto user = dbManager.find_user("login1");
         REQUIRE(user != nullptr);
@@ -32,10 +32,14 @@ TEST_CASE("Find user", "[Users database]") {
         REQUIRE(user->getHashedPassword() == "hash3");
         REQUIRE(user->getSalt() == "salt3");
     }
+    SECTION("User not in database") {
+        auto user = dbManager.find_user("login4");
+        REQUIRE(user == nullptr);
+    }
 }
 
 TEST_CASE("Find all users", "[Users database]") {
-    DBManager dbManager("../tests/clients");
+    DBManager dbManager("../tests/test_users");
     auto users = dbManager.find_all();
     REQUIRE(users.size() == 3);
     REQUIRE(users[0].getLogin() == "login1");
@@ -50,8 +54,9 @@ TEST_CASE("Find all users", "[Users database]") {
 }
 
 TEST_CASE("Add user", "[Users database]") {
-    REQUIRE(std::filesystem::copy_file("../tests/clients", "../tests/temp", std::filesystem::copy_options::overwrite_existing));
+    REQUIRE(std::filesystem::copy_file("../tests/test_users", "../tests/temp", std::filesystem::copy_options::overwrite_existing));
     DBManager dbManager("../tests/temp");
+    REQUIRE(dbManager.find_user("new_login") == nullptr);
     User newUser("new_login", "new_hash", "new_salt");
     dbManager.add_user(newUser);
     auto user = dbManager.find_user("new_login");

@@ -341,7 +341,7 @@ unique_ptr<SetScheduleRequest> Parser::parse_setschedule_request() {
 
 std::unique_ptr<Response> Parser::parse_response() {
     int first;
-    std::vector<int> first_digit{1,2,3,4};
+    std::vector<int> first_digit{1,2,3,4,5};
     if(current_index >= message.size() || !isdigit(message[current_index]) || std::find(std::begin(first_digit), std::end(first_digit), message[current_index] - '0') == std::end(first_digit)) {
         return nullptr;
     }

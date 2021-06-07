@@ -1,3 +1,5 @@
+//Peyot
+//Iwo Sokal
 //29.05.2021
 
 #ifndef PEYOT_UI_H

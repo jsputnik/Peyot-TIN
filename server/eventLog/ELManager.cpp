@@ -1,4 +1,6 @@
-// 26.05.2021
+//Peyot
+//Olgierd Sobieraj
+//26.05.2021
 
 #include "ELManager.h"
 #include <iostream>

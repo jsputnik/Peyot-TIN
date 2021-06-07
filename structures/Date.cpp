@@ -1,4 +1,6 @@
-//02.06.2021
+//Peyot
+//Szymon Kisiel
+//2.06.2021
 
 #include "Date.h"
 

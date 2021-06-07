@@ -1,3 +1,5 @@
+//Peyot
+//Iwo Sokal
 //6.06.2021
 
 #ifndef PEYOT_SETSCHEDULEREQUEST_H

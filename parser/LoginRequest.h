@@ -1,3 +1,5 @@
+//Peyot
+//Iwo Sokal
 //4.06.2021
 
 #ifndef PEYOT_LOGINREQUEST_H

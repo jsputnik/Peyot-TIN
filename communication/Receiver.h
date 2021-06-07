@@ -1,3 +1,5 @@
+//Peyot
+//Iwo Sokal, Szymon Kisiel, Olgierd Sobieraj, Illia Yatskevich
 //21.05.2021
 
 #ifndef PEYOT_RECEIVER_H

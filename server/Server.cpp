@@ -1,3 +1,5 @@
+//Peyot
+//Iwo Sokal, Szymon Kisiel, Olgierd Sobieraj, Illia Yatskevich
 //21.05.2021
 
 #include "Server.h"
@@ -8,16 +10,16 @@
 
 using namespace std;
 
-Server::Server() {
+Server::Server(string ip_address) {
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
-        cerr << "Socket call error" << endl; //error handler
+        cerr << "Socket call error" << endl;
         exit(1);
     }
     server.sin_family = AF_INET;
-    server.sin_addr.s_addr = inet_addr("127.0.0.1"); //deprecated
+    server.sin_addr.s_addr = inet_addr(ip_address.c_str());
     server.sin_port = htons(45265);
     if (bind(sock, (struct sockaddr *) &server, sizeof server) != 0) {
-        cerr << "Bind call error" << endl; //error handler
+        cerr << "Bind call error" << endl;
         exit(2);
     }
 }
@@ -28,7 +30,6 @@ void Server::start() {
         exit(3);
     }
     while (true) {
-       // if (client_sock = accept)
         handler.make_connection(sock);
     }
 }

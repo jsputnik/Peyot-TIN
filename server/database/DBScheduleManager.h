@@ -1,4 +1,6 @@
-//02.06.2021
+//Peyot
+//Szymon Kisiel
+//2.06.2021
 
 #ifndef PEYOT_DBSCHEDULEMANAGER_H
 #define PEYOT_DBSCHEDULEMANAGER_H

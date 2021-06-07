@@ -1,16 +1,27 @@
+//Peyot
+//Iwo Sokal, Szymon Kisiel, Olgierd Sobieraj, Illia Yatskevich
 //13.05.2021
+
 #include <iostream>
 #include "Server.h"
-#include "database/DBManager.h"
-#include "eventLog/ELManager.h"
-#include "Executor.h"
-#include "database/DBScheduleManager.h"
 
 using namespace std;
 
-int main() {
+int main(int argc, char* argv[]) {
     std::cout << "Start server" << std::endl;
-    Server server;
+    string ip_address;
+    if (argc == 1) {
+        cout << "Initialising server with IP: 127.0.0.1" << endl;
+        ip_address = "127.0.0.1";
+    }
+    else if (argc > 2) {
+        cout << "Invalid usage" << endl;
+        return 1;
+    }
+    else {
+        ip_address = argv[1];
+    }
+    Server server(ip_address);
     server.print_server_details();
     server.log_server_details();
     server.start();

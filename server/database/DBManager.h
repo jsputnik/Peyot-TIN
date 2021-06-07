@@ -1,3 +1,5 @@
+//Peyot
+//Szymon Kisiel
 //26.05.2021
 
 #ifndef PEYOT_DBMANAGER_H

@@ -36,7 +36,6 @@ bool DBScheduleManager::open() {
         std::cerr << db_name <<" is not schedule database" << std::endl;
         return false; //throw
     }
-    sleep(10);
     return true;
 }
 

@@ -11,26 +11,36 @@ using namespace std;
 DBManager::DBManager(string db_name) : db_name(db_name) {
 }
 
-void DBManager::open() {
-    pthread_mutex_lock(&mutex); //should use pthread_mutex_timedlock
+bool DBManager::open() {
+    struct timespec timeout_time;
+    clock_gettime(CLOCK_REALTIME, &timeout_time);
+    timeout_time.tv_sec += timeout_time_sec;
+    int error_num = pthread_mutex_timedlock(&mutex, &timeout_time);
+    if (error_num == ETIMEDOUT) {
+        std::cout << "TIMED OUT" << std::endl;
+        return false; //throw
+    }
+    else if (error_num != 0)
+        return false; //throw
 
     db.open(db_name, std::ios::in | std::ios::out | std::ios_base::app); //TODO (?): mode parameter: ios::in for input only, ios::out for output only
     if (!db.good()) {
         cerr << "Can't open file: " << db_name << endl;
-        //exit() ?
+        return false; //throw
     }
     std::string line;
     std::getline(db, line);
     if (line != "<CLIENTS DATABASE>" && line != "<EMPLOYEES DATABASE>") {
         cerr << db_name << " is not clients/employees database" << endl;
-        //exit()
+        return false; //throw
     }
 
     std::getline(db, line);
     if (line != "<login-hashed_passwd-salt>") {
         cerr << db_name <<" is not clients/employees database" << endl;
-        //exit()
+        return false; //throw
     }
+    return true;
 }
 
 void DBManager::close() {
@@ -39,7 +49,8 @@ void DBManager::close() {
 }
 
 std::unique_ptr<User> DBManager::find_user(std::string user_login) {
-    open();
+    if (!open())
+        return nullptr;
     std::string login;
     std::string hashed_password;
     std::string salt;
@@ -61,8 +72,9 @@ std::unique_ptr<User> DBManager::find_user(std::string user_login) {
 
 
 std::vector<User> DBManager::find_all() {
-    open();
     std::vector<User> users;
+    if (!open())
+        return users;
     std::string login;
     std::string hashed_password;
     std::string salt;
@@ -76,12 +88,14 @@ std::vector<User> DBManager::find_all() {
     return users;
 }
 
-void DBManager::add_user(User newUser) {
-    open();
+bool DBManager::add_user(User newUser) {
+    if (!open())
+        return false;
     db << '\n' << newUser.getLogin();
     db << '\t' << newUser.getHashedPassword();
     db << '\t' << newUser.getSalt();
     close();
+    return true;
 }
 
 void DBManager::setDbName(const string &dbName) {

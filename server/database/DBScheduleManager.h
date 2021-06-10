@@ -18,13 +18,14 @@ class DBScheduleManager {
     // lock mutex before file open
     // unlock mutex after file close
     static inline pthread_mutex_t mutex  = PTHREAD_MUTEX_INITIALIZER;
+    const int timeout_time_sec = 5;
 
-    void open();
+    bool open();
     void close();
     void replace_and_close(const char* temp_file);
 public:
     DBScheduleManager(std::string db_name);
-    void add_date(Date date);
+    bool add_date(Date date);
     bool modify_date(std::string old_instructor_login, std::string old_client_login, std::string old_start_time, Date new_date);
     bool delete_date(std::string instructor_login, std::string client_login, std::string start_time);
     std::vector<Date> find_by_client(std::string login);

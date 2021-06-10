@@ -3,28 +3,41 @@
 //2.06.2021
 
 #include "DBScheduleManager.h"
+#include <unistd.h>
+#include <time.h>
 
-void DBScheduleManager::open() {
-    pthread_mutex_lock(&mutex); //should use pthread_mutex_timedlock
+bool DBScheduleManager::open() {
+    struct timespec timeout_time;
+    clock_gettime(CLOCK_REALTIME, &timeout_time);
+    timeout_time.tv_sec += timeout_time_sec;
+    int error_num = pthread_mutex_timedlock(&mutex, &timeout_time);
+    if (error_num == ETIMEDOUT) {
+        std::cout << "TIMED OUT" << std::endl;
+        return false; //throw
+    }
+    else if (error_num != 0)
+        return false; //throw
 
     db.open(db_name, std::ios::in | std::ios::out | std::ios_base::app); //TODO (?): mode parameter: ios::in for input only, ios::out for output only
     if (!db.good()) {
         std::cerr << "Can't open file: " << db_name << std::endl;
-        //exit() ?
+        return false; //throw
     }
     std::string line;
     std::getline(db, line);
     if (line != "<SCHEDULE DATABASE>") {
         std::cerr << db_name << " is not schedule database" << std::endl;
-        //exit()
+        return false; //throw
     }
 
 
     std::getline(db, line);
     if (line != "<start_time-end_time-instructor_login-client_login>") {
         std::cerr << db_name <<" is not schedule database" << std::endl;
-        //exit()
+        return false; //throw
     }
+    sleep(10);
+    return true;
 }
 
 void DBScheduleManager::close() {
@@ -42,10 +55,12 @@ void DBScheduleManager::replace_and_close(const char* temp_file) {
 DBScheduleManager::DBScheduleManager(std::string db_name) : db_name(std::move(db_name)) {
 }
 
-void DBScheduleManager::add_date(Date date) {
-    open();
+bool DBScheduleManager::add_date(Date date) {
+    if (!open())
+        return false;
     db << '\n' << date.to_string();
     close();
+    return true;
 }
 
 bool DBScheduleManager::modify_date(std::string old_instructor_login, std::string old_client_login,
@@ -58,7 +73,8 @@ bool DBScheduleManager::modify_date(std::string old_instructor_login, std::strin
 }
 
 bool DBScheduleManager::delete_date(std::string ins_login, std::string cli_login, std::string start_time) {
-    open();
+    if (!open())
+        return false;
     bool result = false;
     std::ofstream temp;
     temp.open("../server/database/temp", std::ofstream::out);
@@ -91,8 +107,9 @@ bool DBScheduleManager::delete_date(std::string ins_login, std::string cli_login
 }
 
 std::vector<Date> DBScheduleManager::find_all() {
-    open();
     std::vector<Date> dates;
+    if (!open())
+        return dates;
     std::string line;
     std::string start_date;
     std::string end_date;
@@ -117,8 +134,9 @@ std::vector<Date> DBScheduleManager::find_all() {
 }
 
 std::vector<Date> DBScheduleManager::find_by_client(std::string login) {
-    open();
     std::vector<Date> result;
+    if (!open())
+        return result;
     std::string line;
     std::string start_date;
     std::string end_date;
@@ -144,8 +162,9 @@ std::vector<Date> DBScheduleManager::find_by_client(std::string login) {
 }
 
 std::vector<Date> DBScheduleManager::find_by_instructor(std::string login) {
-    open();
     std::vector<Date> result;
+    if (!open())
+        return result;
     std::string line;
     std::string start_date;
     std::string end_date;
@@ -171,8 +190,9 @@ std::vector<Date> DBScheduleManager::find_by_instructor(std::string login) {
 }
 
 std::vector<Date>DBScheduleManager::find_by_instructor_and_client(std::string ins_login, std::string cli_login) {
-    open();
     std::vector<Date> result;
+    if (!open())
+        return result;
     std::string line;
     std::string start_date;
     std::string end_date;
@@ -198,7 +218,8 @@ std::vector<Date>DBScheduleManager::find_by_instructor_and_client(std::string in
 }
 
 std::unique_ptr<Date> DBScheduleManager::find(std::string ins_login, std::string cli_login, std::string start_time) {
-    open();
+    if (!open())
+        return nullptr;
     std::string line;
     std::string start_date;
     std::string end_date;
@@ -225,7 +246,8 @@ std::unique_ptr<Date> DBScheduleManager::find(std::string ins_login, std::string
 }
 
 std::unique_ptr<Date>DBScheduleManager::find_by_instructor_and_date(std::string ins_login, std::string start_time) {
-    open();
+    if (!open())
+        return nullptr;
     std::string line;
     std::string start_date;
     std::string end_date;

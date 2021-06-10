@@ -18,14 +18,15 @@ class DBManager {
     // lock mutex before file open
     // unlock mutex after file close
     static inline pthread_mutex_t mutex  = PTHREAD_MUTEX_INITIALIZER;
+    const int timeout_time_sec = 5;
 
-    void open();
+    bool open();
     void close();
 public:
     DBManager(std::string db_name);
-    void add_user(User user);
+    bool add_user(User user);
     //void remove_user(std::string login);
-    //void modify_user(User user); ?
+    //void modify_user(User user);
     std::unique_ptr<User> find_user(std::string login);
     std::vector<User> find_all();
 

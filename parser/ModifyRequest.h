@@ -25,6 +25,14 @@ public:
         return type;
     }
 
+    const std::string &getKeyword() const {
+        return keyword;
+    }
+
+    void setKeyword(const std::string &keyword) {
+        ModifyRequest::keyword = keyword;
+    }
+
     const std::string &getLogin() const {
         return login;
     }

@@ -23,11 +23,11 @@ public:
         type = RequestType::CHECKTERMINSBYTRUCTOR;
     }
 
-    const std::string &getKeyword1() const {
+    const std::string &getKeyword() const {
         return keyword;
     }
 
-    void setKeyword1(const std::string &keyword) {
+    void setKeyword(const std::string &keyword) {
         CheckTerminsByInstructorRequest::keyword = keyword;
     }
 

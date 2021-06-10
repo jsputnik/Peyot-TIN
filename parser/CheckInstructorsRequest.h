@@ -17,19 +17,19 @@ public:
         this->type = RequestType::CHECKINSTRUCTORS;
     }
 
-    const std::string &getKeyword1() const {
+    const std::string &getKeyword() const {
         return keyword;
     }
 
-    void setKeyword1(const std::string &keyword) {
+    void setKeyword(const std::string &keyword) {
         CheckInstructorsRequest::keyword = keyword;
     }
 
-    const std::string &getFlag1() const {
+    const std::string &getFlag() const {
         return flag;
     }
 
-    void setFlag1(const std::string &flag) {
+    void setFlag(const std::string &flag) {
         CheckInstructorsRequest::flag = flag;
     }
 
